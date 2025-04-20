@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const db = require('../../config/db')
 const Joi = require('joi')
 let salt = bcrypt.genSaltSync(10);
+const {secretKey} = require("../../config/jwt.config.js")
 
 module.exports = {
     login,
@@ -37,9 +38,9 @@ function loginFun(req, next) {
             let finder = {}
             if (!!body.email)
                 finder = { email: body.email.toLowerCase() }
-            User.findOne(finder).then(res => {
+                await User.findOne(finder).then(res => {
                 if (!!res) {
-                    if (!bcrypt.compareSync(body.password, res.password)) {
+                    if (!bcrypt.compare(body.password, res.password)) {
                         reject("Invalid Username Password")
                     }
                     else {
@@ -47,7 +48,7 @@ function loginFun(req, next) {
                             let user = {
                                 name: res.name, email: res.email, userType: res.userType, isAdmin: res.isAdmin, _id: res._id
                             }
-                            const token = jwt.sign(user, process.env.SECRET)
+                            const token = jwt.sign(user, secretKey,{ expiresIn: '1h' })
                             resolve({
                                 token: token,
                                 status: 200,

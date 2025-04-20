@@ -1,10 +1,12 @@
 const User = require('../apis/user/userModel')
+const bcrypt = require('bcrypt');
+let salt = bcrypt.genSaltSync(10);
 
 const userObj = {
     userAutoId: 1,
     name: "Admin",
     email: "admin@admin.com",
-    password: "$2b$10$tbSZP8IZYfEw/3FcZZhSLOsuQhxBSw.2dHYcofSnXU9m1fdE.manK",
+    password: bcrypt.hashSync("admin", salt),
     isDelete: false,
     isBlocked: false,
     userType: 1,
@@ -14,8 +16,11 @@ const userObj = {
 exports.createAdmin = async () => {
     let existingAdmin = await User.findOne({ email: userObj.email })
     if (!existingAdmin) {
-        new User(userObj).save().then(r => {
-            console.log("Admin created for the project")
+        await new User(userObj).save().then(r => {
+            logger.info("Admin created for the project")
         })
+    }
+    else {
+        logger.info("Admin already exist.")
     }
 }

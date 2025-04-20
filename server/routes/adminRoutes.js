@@ -3,13 +3,14 @@ const sharp = require('sharp');
 const router = require('express').Router()
 const userController = require('../apis/user/userController')
 const categoryController = require('../apis/category/categoryController')
+const cors = require('cors')
 
 //helper
 var helper = require('../utilities/helper')
 
 
 
-
+router.use(cors())
 /** AUTHENTICATION */
 router.post('/login', userController.login)
 

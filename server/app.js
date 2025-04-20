@@ -46,13 +46,13 @@ app.use(express.urlencoded({ limit: "50mb", extended: false, parameterLimit: 500
 //for compression of response and faster
 app.use(compression())
 //routes
+require('./config/seed').createAdmin()
 app.use('/admin', adminRoutes)
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Server ');
 });
 
-require('./config/seed').createAdmin()
 //global error handler
 app.use(errorHandler)
 
