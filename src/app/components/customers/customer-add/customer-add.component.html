@@ -1,0 +1,176 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+  <h4 class="page-title">{{ type }} Client</h4>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+    <li class="breadcrumb-item">
+      <a [routerLink]="['/admin/clients']">Customer</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+      {{ type }} Client
+    </li>
+  </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW-1 -->
+<div class="row">
+  <div class="col-md-12 col-lg-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <div>
+          <h3 class="card-title">{{ type }} Client</h3>
+        </div>
+
+        <div class="row">
+          <button
+            class="btn btn-primary btn-sm mr-2"
+            [routerLink]="['/admin/clients']"
+          >
+            Clients List
+          </button>
+        </div>
+      </div>
+      <div class="mt-4 p-3">
+        <form [formGroup]="customerForm">
+          <div class="row">
+            <div class="col-md-6">
+              <mat-form-field appearance="legacy">
+                <mat-label>Company Name</mat-label>
+                <input
+                  matInput
+                  placeholder="Company name"
+                  formControlName="companyName"
+                />
+                <mat-error
+                  *ngIf="customerForm.get('companyName')?.hasError('required')"
+                >
+                  Please enter company name.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="legacy">
+                <mat-label>Client Name</mat-label>
+                <input
+                  matInput
+                  placeholder="Client name"
+                  formControlName="name"
+                />
+                <mat-error
+                  *ngIf="customerForm.get('name')?.hasError('required')"
+                >
+                  Please enter name.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6 mt-3">
+              <mat-form-field appearance="legacy">
+                <mat-label>Email</mat-label>
+                <input
+                  type="email"
+                  matInput
+                  placeholder="Email"
+                  formControlName="email"
+                />
+                <mat-error
+                  *ngIf="
+                    customerForm.get('email')?.hasError('required') ||
+                    customerForm.get('email')?.hasError('email')
+                  "
+                >
+                  Please enter a valid email.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6 mt-3" *ngIf="type == 'Add'">
+              <mat-form-field appearance="legacy">
+                <mat-label>Password</mat-label>
+                <input
+                  type="password"
+                  matInput
+                  placeholder="Password"
+                  formControlName="password"
+                />
+                <mat-error
+                  *ngIf="customerForm.get('password')?.hasError('required')"
+                >
+                  Please enter a password.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="d-flex col-md-6 align-items-center">
+              <mat-form-field appearance="legacy" class="mt-3">
+                <mat-label>Contact</mat-label>
+                <input type="text" matInput formControlName="phone" />
+                <mat-error
+                  *ngIf="
+                    customerForm.get('phone')?.hasError('required') ||
+                    customerForm.get('phone')?.hasError('pattern')
+                  "
+                >
+                  Please enter a valid contact number.
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-6 mt-3">
+              <mat-form-field class="example-full-width">
+                <mat-label>Pincode</mat-label>
+                <input
+                  matInput
+                  #postalCode
+                  maxlength="6"
+                  formControlName="pinCode"
+                />
+                <mat-hint align="end"
+                  >{{ postalCode.value.length }} / 6</mat-hint
+                >
+                <mat-error
+                  *ngIf="customerForm.get('pinCode')?.hasError('pattern')"
+                >
+                  Please enter a valid pincode.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6 mt-5">
+              <mat-form-field appearance="legacy">
+                <mat-label>GST Num</mat-label>
+                <input
+                  matInput
+                  placeholder="GST Number"
+                  formControlName="gstNum"
+                />
+                <mat-error
+                  *ngIf="customerForm.get('gstNum')?.hasError('required')"
+                >
+                  Please enter gst number.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field class="example-full-width">
+                <mat-label>Address</mat-label>
+                <textarea matInput formControlName="address"></textarea>
+                <mat-error
+                  *ngIf="customerForm.get('address')?.hasError('required')"
+                >
+                  Please enter address.
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <button
+            class="btn btn-primary d-block m-auto"
+            (click)="submit()"
+            tabindex="1"
+            [disabled]="customerForm.invalid"
+          >
+            {{ type }} Client
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

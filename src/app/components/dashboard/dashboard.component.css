@@ -1,0 +1,25 @@
+.fa-lg {
+  font-size: 1.33333333em;
+  line-height: 1.3em;
+  vertical-align: -15%;
+}
+
+.text-org {
+  color: hotpink;
+}
+
+.card {
+  background-color: #dde6ed;
+}
+.card-body {
+  background-color: #fff;
+}
+
+.c-bdr-white {
+  /* border-width: 3px;
+  border-color: #fff !important;
+  border-style: solid; */
+}
+.text-own-p {
+  color: #0d6efd !important;
+}

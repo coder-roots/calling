@@ -1,0 +1,415 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <h4 class="page-title">{{ type }} Enquiry</h4>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/admin/courses']">Enquiry</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ type }} Enquiry
+        </li>
+    </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW-1 -->
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div>
+                    <h3 class="card-title">{{ type }} Enquiry</h3>
+                </div>
+
+                <div class="row">
+                    <button class="btn btn-primary btn-sm mr-2" [routerLink]="['/admin/enquiries']">
+                        Enquiry List
+                    </button>
+                </div>
+            </div>
+            <div class="p-3">
+                <form [formGroup]="enquiryForm">
+
+                    <mat-accordion class="example-headers-align">
+                        <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Student Detail
+                                </mat-panel-title>
+                                <!-- <mat-panel-description>
+                                    Type your name and age
+                                    <mat-icon>account_circle</mat-icon>
+                                </mat-panel-description> -->
+                            </mat-expansion-panel-header>
+
+
+                            <div class="row px-5 py-2">
+                                <div class="col-md-4 mt-3">
+                                    <section class="example-section py-3">
+                                        <mat-checkbox class="example-margin" formControlName="isNewStudent"
+                                            (change)="isNewStudentChange($event)">New
+                                            Student</mat-checkbox>
+                                    </section>
+                                </div>
+                                <div class="col-md-4">
+                                    <div>
+                                        <ng-select formControlName="studentId" (change)="selectStudent($event)"
+                                            [readonly]="!!enquiryForm.value.isNewStudent" placeholder="Student">
+                                            <ng-option value="" selected disabled>Choose</ng-option>
+                                            <ng-option *ngFor="let i of studentList" [value]="i._id">
+                                                {{i?.studentName}} - {{i?.email}}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <!-- </div>
+                        <div class="row"> -->
+                                <div class="col-md-4 mt-3">
+                                    <mat-form-field appearance="legacy">
+                                        <mat-label>Student Name</mat-label>
+                                        <input matInput placeholder="Student name" formControlName="studentName" />
+                                        <mat-error *ngIf="enquiryForm.get('studentName')?.hasError('required')">
+                                            Please enter Student Name.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field appearance="legacy">
+                                        <mat-label>Email</mat-label>
+                                        <input matInput placeholder="Email" formControlName="email" />
+                                        <mat-error *ngIf="enquiryForm.get('email')?.hasError('required')">
+                                            Please enter Email.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <mat-form-field appearance="legacy">
+                                        <mat-label>Personal Contact</mat-label>
+                                        <input type="number" matInput placeholder="Phone"
+                                            formControlName="personalContact" />
+                                        <mat-error *ngIf=" enquiryForm.get('personalContact')?.hasError('required') || enquiryForm.get('personalContact')?.hasError('personalContact')
+                        ">
+                                            Please enter valid Contact No.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field appearance="legacy">
+                                        <mat-label>Parent's Contact</mat-label>
+                                        <input type="number" matInput placeholder="Parent's Contact"
+                                            formControlName="parentsContact" />
+                                        <mat-error *ngIf="enquiryForm.get('parentsContact')?.hasError('required')">
+                                            Please enter parent's Contact.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
+                        </mat-expansion-panel>
+                        <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Training Detail
+                                </mat-panel-title>
+                                <!-- <mat-panel-description>
+                                  Type the country name
+                                  <mat-icon>map</mat-icon>
+                                </mat-panel-description> -->
+                            </mat-expansion-panel-header>
+
+                            <div class="row px-5 py-2">
+                                <div class="col-md-4 mt-2">
+                                    <section class="example-section">
+                                        <mat-checkbox class="example-margin" formControlName="isOfficialTraining"
+                                            (change)="isOfficialTrainingChange($event)">Official
+                                            Training</mat-checkbox>
+                                    </section>
+                                </div>
+                                <div class="col-md-4 mt-2">
+                                    <section class="example-section">
+                                        <mat-checkbox class="example-margin"
+                                            [disabled]="!!enquiryForm.value.isOfficialTraining"
+                                            formControlName="isPassout"
+                                            (change)="isPassoutStudentChange($event)">Passout
+                                            Student</mat-checkbox>
+                                    </section>
+                                </div>
+                                <div class="col-md-4 mt-2"  style="opacity: 0;">
+
+
+                                    <!-- <mat-label>Choose Training</mat-label> -->
+                                    <mat-radio-group aria-label="Select an option"
+                                        *ngIf="enquiryForm.value.isOfficialTraining" formControlName="trainingType">
+                                        <mat-radio-button value="6 weeks" selected checked="checked">6 weeks</mat-radio-button>
+                                        <mat-radio-button value="6 months">6 months</mat-radio-button>
+                                    </mat-radio-group>
+
+
+                                </div>
+                                <div class="col-md-4 d-flex align-items-center">
+                                    <div class="w-100 pr-2">
+                                        <ng-select formControlName="college" placeholder="College">
+                                            <ng-option value="" selected disabled>Choose</ng-option>
+                                            <ng-option *ngFor="let i of collegeList" [value]="i._id">
+                                                {{i?.name}}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+
+
+                                    <button class="btn btn-primary btn-sm mr-2" (click)="openDialog('College')">
+                                        +
+                                    </button>
+                                    <!-- <mat-form-field appearance="legacy">
+                                <mat-label>Choose College</mat-label>
+                                <mat-select formControlName="college">
+                                    <mat-option *ngFor="let i of collegeList" [value]="i._id">
+                                        {{i?.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field> -->
+                                </div>
+
+                                <div class="col-md-4 d-flex align-items-center">
+                                    <div class="w-100 pr-2">
+                                        <ng-select formControlName="collegeCourseId" placeholder="College Course">
+                                            <ng-option value="" selected disabled>Choose</ng-option>
+                                            <ng-option *ngFor="let i of collegeCourseList" [value]="i._id">
+                                                {{i?.name}}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm mr-2" (click)="openDialog('CollegeCourse')">
+                                        +
+                                    </button>
+                                    <!-- <mat-form-field appearance="legacy">
+                                <mat-label>College Course</mat-label>
+                                <input type="text" matInput placeholder="College Course"
+                                    formControlName="collegeCourse" />
+                                <mat-error *ngIf="enquiryForm.get('collegeCourse')?.hasError('required')">
+                                    Please enter college Course.
+                                </mat-error>
+                            </mat-form-field> -->
+                                </div>
+                                <div class="col-md-4 mt-3">
+                                    <mat-form-field appearance="legacy" *ngIf="!enquiryForm.value.isPassout">
+                                        <mat-label>Semester</mat-label>
+                                        <input matInput placeholder="Semester" formControlName="semester" />
+                                        <mat-error *ngIf="enquiryForm.get('semester')?.hasError('required')">
+                                            Please enter Semester.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+
+
+
+                                <!-- <div class="d-flex col-md-6 align-items-center">
+                            <mat-label>Choose Course Type</mat-label> &nbsp; &nbsp;
+                            <mat-radio-group aria-label="Select Course Type" formControlName="courseType"
+                                aria-labelledby="example-radio-group-label" class="example-radio-group">
+                                <mat-radio-button value="1">Single</mat-radio-button>
+                                <mat-radio-button value="2">Combo</mat-radio-button>
+                            </mat-radio-group>
+                        </div> -->
+
+                                <div class="col-md-4">
+                                    <ng-select formControlName="managementPersonId" placeholder="Management Person" [dropdownPosition]="'top'">
+                                        <ng-option value="" selected disabled>Choose</ng-option>
+                                        <ng-option *ngFor="let i of employeeList" [value]="i._id">
+                                            {{i?.name}} - {{i?.email}}
+                                        </ng-option>
+                                    </ng-select>
+                                    <!-- <mat-form-field appearance="legacy">
+                                <mat-label>Management Person</mat-label>
+                                <mat-select formControlName="managementPersonId">
+                                    <mat-option *ngFor="let i of employeeList" [value]="i._id">
+                                        {{i?.name}} - {{i?.email}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field> -->
+                                </div>
+
+                                <div class="col-md-4 mt-3">
+                                    <mat-form-field appearance="legacy">
+                                        <mat-label>Enquiry date</mat-label>
+                                        <input matInput [matDatepicker]="picker" formControlName="enquiryDate">
+                                        <mat-hint>MM/DD/YYYY</mat-hint>
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-4 mt-3">
+                                    <mat-form-field class="example-full-width">
+                                        <mat-label>Comments</mat-label>
+                                        <input type="text" matInput placeholder="Comments" formControlName="comments" />
+                                        <mat-error *ngIf="enquiryForm.get('comments')?.hasError('required')">
+                                            Please enter comments.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-4 mt-3">
+                                  <ng-select formControlName="company" placeholder="Company" [dropdownPosition]="'top'">
+                                    <ng-option *ngFor="let i of companies" [value]="i">
+                                        {{i}}
+                                    </ng-option>
+                                </ng-select>
+                              </div>
+                            </div>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Course(s)
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-primary btn-sm mx-2"
+                                    (click)="addTechnology($event)" style="background-color: #fff;">Add New</button>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-md-12 col-lg-12">
+                                    <div class="" formArrayName="technologies">
+                                        <div class="px-3 my-4 py-3 border border-5 shadow-lg"
+                                            *ngFor="let tech of technologies.controls; let index = index"
+                                            [formGroupName]="index">
+                                            <div class="text-right">
+                                                <mat-checkbox class="example-margin mt-4"
+                                                    (change)="freeCourse(index, $event)"
+                                                    [disabled]="checkFreeCourseDisabled(index)"
+                                                    [checked]="ifCheck(index)" *ngIf="index!=0">Free
+                                                    Course</mat-checkbox>
+                                                <button type="button" class="btn btn-primary btn-sm mx-2"
+                                                    *ngIf="index!=0" (click)="removeTechnology(index)">
+                                                    x
+                                                </button>
+                                                <br />
+
+                                            </div>
+                                            <div class="row px-4">
+                                                <div class="col-md-4">
+                                                    <ng-select formControlName="course"
+                                                        (change)="courseChange($event, index)" placeholder="Course">
+                                                        <ng-option value="" selected disabled>Choose</ng-option>
+                                                        <ng-option *ngFor="let i of courseList" [value]="i._id">
+                                                            {{i?.name}} - <span
+                                                                *ngIf="i?.courseType==1">Single</span><span
+                                                                *ngIf="i?.courseType==2">Combo</span>
+                                                        </ng-option>
+                                                    </ng-select>
+                                                    <!-- <mat-form-field appearance="legacy">
+                                                    <mat-label>Choose Course</mat-label>
+                                                    <mat-select formControlName="course"
+                                                        (selectionChange)="courseChange($event, index)">
+                                                        <mat-option *ngFor="let i of courseList" [value]="i._id">
+                                                            {{i?.name}} - <span
+                                                                *ngIf="i?.courseType==1">Single</span><span
+                                                                *ngIf="i?.courseType==2">Combo</span>
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field> -->
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <!-- <ng-select formControlName="enquiryTakenBy"
+                                                        placeholder="Enquiry Taken By">
+                                                        <ng-option value="" selected disabled>Choose</ng-option>
+                                                        <ng-option *ngFor="let i of employeeList" [value]="i._id">
+                                                            {{i?.name}} - {{i?.email}}
+                                                        </ng-option>
+                                                    </ng-select> -->
+
+                                                    <ng-select
+                                                      	[multiple]="true"
+                                                      	[closeOnSelect]="false"
+	                                                      [searchable]="true"
+                                                        placeholder="Select Person"
+	                                                      formControlName="enquiryTakenBy"
+                                                        [dropdownPosition]="'top'" >
+
+                                                        <ng-option value="" selected disabled>Choose</ng-option>
+                                                        <ng-option *ngFor="let i of employeeList" [value]="i._id">
+                                                            {{i?.name}}
+                                                        </ng-option>
+                                                    </ng-select>
+
+                                                </div>
+                                                <div class="col-md-4 mt-3">
+                                                    <mat-form-field appearance="legacy">
+                                                        <mat-label>Duration</mat-label>
+                                                        <input matInput placeholder="Duration"
+                                                            formControlName="duration" />
+                                                        <mat-error
+                                                            *ngIf="enquiryForm.get('duration')?.hasError('required')">
+                                                            Please enter Duration.
+                                                        </mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <mat-form-field appearance="legacy">
+                                                        <mat-label>Installments</mat-label>
+                                                        <input matInput placeholder="Installments"
+                                                            formControlName="installments" />
+                                                        <mat-error
+                                                            *ngIf="enquiryForm.get('installments')?.hasError('required')">
+                                                            Please enter Installments.
+                                                        </mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <mat-form-field appearance="legacy">
+                                                        <mat-label>Course Fee</mat-label>
+                                                        <input type="number" matInput placeholder="Fee"
+                                                            formControlName="fee" />
+                                                        <mat-error
+                                                            *ngIf=" enquiryForm.get('fee')?.hasError('required') || enquiryForm.get('fee')?.hasError('fee')">
+                                                            Please enter Fee.
+                                                        </mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <mat-form-field appearance="legacy">
+                                                        <mat-label>Minimum Registration Fee</mat-label>
+                                                        <input type="number" matInput
+                                                            placeholder="Minimum Registration Fee"
+                                                            formControlName="minimumRegistrationFee" />
+                                                        <mat-error
+                                                            *ngIf="enquiryForm.get('minimumRegistrationFee')?.hasError('required')">
+                                                            Please enter minimum registration fee.
+                                                        </mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <mat-form-field appearance="legacy">
+                                                        <mat-label>Discount</mat-label>
+                                                        <input type="number" matInput placeholder="Discount"
+                                                            formControlName="discount" min="0" />
+                                                        <mat-error
+                                                            *ngIf="enquiryForm.get('discount')?.hasError('required')">
+                                                            Please enter discount.
+                                                        </mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                    <br>
+                    <button class="btn btn-primary d-block m-auto" (click)="submit()" tabindex="1"
+                        [disabled]="enquiryForm.invalid">
+                        {{ type }} Enquiry
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

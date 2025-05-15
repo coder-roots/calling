@@ -1,0 +1,191 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <h4 class="page-title">Employee</h4>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Employee</li>
+    </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+
+
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <h4 class="card-title">View Employee Detail</h4>
+                <div>
+                    <button class="btn btn-primary btn-sm mx-2" [routerLink]="['/admin/employee/edit',employeeId]">
+                        <mat-icon style="font-size: 15px;">edit</mat-icon> Update
+                    </button>
+                    <!-- <button class="btn btn-primary btn-sm mx-2" [routerLink]="['/admin/employee/salarySlip',employeeId]">
+                        <mat-icon style="font-size: 15px;">payment</mat-icon> Salary Slips
+                    </button> -->
+                </div>
+
+            </div>
+            <div class="mt-2">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important; height:50px;" colspan="4">
+                                Personal Information
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- <tr>
+                            <th width="50%">Picture</th>
+                            <td width="50%">
+                                <img [src]="getImageUrl(employeeData?.trimImage)" alt="">
+                            </td>
+                        </tr> -->
+                        <tr>
+                            <th width="25%">Name</th>
+                            <td width="25%">{{employeeData?.name}}</td>
+                            <th width="25%">Email</th>
+                            <td width="25%">{{employeeData?.email}}</td>
+                        </tr>
+                        <tr>
+                            <th>Personal Contact</th>
+                            <td>{{employeeData?.contact}}</td>
+                            <th>Birth Date</th>
+                            <td>{{employeeData?.birthDate | date}}</td>
+                            <!-- <th>Family's Contact</th>
+                            <td>{{employeeData?.familyContact}}</td> -->
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td>{{employeeData?.address}}</td>
+                            <th>Marital Status</th>
+                            <td>{{employeeData?.maritalStatus}}</td>
+                        </tr>
+                        <tr *ngIf="employeeData?.maritalStatus=='Married'">
+                            <th>Spouse Name</th>
+                            <td>{{employeeData?.spouseName}}</td>
+                            <th>Spouse Employer</th>
+                            <td>{{employeeData?.spouseEmployer}}</td>
+                        </tr>
+                        <!-- <tr> -->
+                            
+                            <!-- <th>Special Interests</th>
+                            <td>{{employeeData?.specialInterests}}</td> -->
+                        <!-- </tr> -->
+                        <tr>
+                            <th>Aadhar Card No.</th>
+                            <td>{{employeeData?.aadharCard}}</td>
+                            <th>Pan No.</th>
+                            <td>{{employeeData?.panNo}}</td>
+                        </tr>
+                        <tr>
+                            <th>Picture</th>
+                            <td><img [src]="getImageUrl(employeeData?.trimImage)" alt=""></td>
+                            <th>Learning Institution(s)</th>
+                            <td>
+                                <div *ngFor="let x of employeeData?.learningInstitutions">
+                                    {{x.course}} from {{x.institution}}
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important; height:50px;" colspan="4">
+                                Job Information
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th width="25%">Job Title</th>
+                            <td width="25%">{{employeeData?.jobTitle}}</td>
+                            <th width="25%">Joining Date</th>
+                            <td width="25%">{{employeeData?.joiningDate | date}}</td>
+                        </tr>
+                        <tr>
+                            <th>Employee ID</th>
+                            <td>{{employeeData?.employeeId}}</td>
+                            <th>Department</th>
+                            <td>{{employeeData?.department}}</td>
+                        </tr>
+                        <tr>
+                            <th>Supervisor</th>
+                            <td>{{employeeData?.supervisor?.name}}</td>
+                            <th>Work Location</th>
+                            <td>{{employeeData?.workLocation}}</td>
+                        </tr>
+                        <tr>
+                            <th>Work Email</th>
+                            <td>{{employeeData?.workEmail}}</td>
+                            <th>Start Date Salary</th>
+                            <td>{{employeeData?.startDateSalary}}</td>
+                            <!-- <th>Work Number</th>
+                            <td>{{employeeData?.workNumber}}</td> -->
+                        </tr>
+                        <!-- <tr> -->
+                           
+                            <!-- <th>Special Interests</th>
+                            <td>{{employeeData?.specialInterests}}</td> -->
+                        <!-- </tr> -->
+
+                    </tbody>
+
+                </table>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important; height:50px;" colspan="4">
+                                Emergency Contact
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th width="25%">Relation</th>
+                            <td width="25%">{{employeeData?.relationship}}</td>
+                            <th width="25%">Name</th>
+                            <td width="25%">{{employeeData?.personName}}</td>
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td>{{employeeData?.personAddress}}</td>
+                            <th>Department</th>
+                            <td>{{employeeData?.department}}</td>
+                        </tr>
+                        <tr *ngIf="!!employeeData?.healthCondition">
+                            <th>Health Condition</th>
+                            <td>{{employeeData?.healthCondition}}</td>
+                        </tr>
+
+
+                    </tbody>
+
+                </table>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important; height:50px;" colspan="4">
+                                Other
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th width="25%">Created At</th>
+                            <td width="25%">{{employeeData?.createdAt | date}}</td>
+                            <th width="25%"></th>
+                            <td width="25%"></td>
+                        </tr>
+
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

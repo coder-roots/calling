@@ -1,0 +1,28 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "~@ng-select/ng-select/themes/material.theme.css";
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+    background-color: #f5b603!important;
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+    background-color: rgb(255 201 48 / 54%)!important;
+}
+
+.card-title{
+  font-size: x-large!important;
+  font-weight: 800;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.bg-grey{
+  background-color: rgb(201, 208, 214);
+}
+
+

@@ -1,0 +1,161 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <h4 class="page-title">Employee</h4>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Employee</li>
+    </ol>
+  </div>
+  <!-- PAGE-HEADER END -->
+  
+  <!-- ROW-1 -->
+  <div class="row">
+    <div class="col-md-12 col-lg-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between">
+          <h3 class="card-title">Employee List</h3>
+          <div>
+            <button class="btn btn-primary btn-sm mx-1" routerLink="/admin/employee/add">
+              + Add Single Employee
+            </button>
+            <button class="btn btn-primary btn-sm mx-1" (click)="openDialog()">
+              + Add Multiple Employees
+            </button>
+          </div>
+        </div>
+        <div>
+          <div>
+            <div class="input-group p-5">
+              <input
+                type="search"
+                (keyup)="getEmployee($event)"
+                class="form-control rounded bg-white"
+                placeholder="Search"
+                aria-label="Search"
+                aria-describedby="search-addon"
+                [(ngModel)]="search"
+              />
+              <button
+                type="button"
+                class="btn btn-primary text-white"
+                (click)="getAllEmployee(null)"
+              >
+                Search
+              </button>
+            </div>
+  
+            <table
+              mat-table
+              [dataSource]="dataSource"
+              class="table card-table table-vcenter mat-elevation-z8"
+            >
+              <!-- AutoId Column -->
+              <ng-container matColumnDef="employeeAutoId">
+                <th mat-header-cell *matHeaderCellDef>ID</th>
+                <td mat-cell *matCellDef="let row">#{{ row.employeeAutoId }}</td>
+              </ng-container>
+  
+              <!-- Image Column -->
+              <ng-container matColumnDef="image">
+                <th mat-header-cell *matHeaderCellDef>Image</th>
+                <td mat-cell *matCellDef="let row">
+                    <img [src]="getImageUrl(row?.trimImage)" alt="">
+                </td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Employee</th>
+                <td mat-cell *matCellDef="let row">{{ row?.name }}</td>
+              </ng-container>
+
+              <!-- Employee Type Column -->
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef>Email</th>
+                <td mat-cell *matCellDef="let row">{{row?.email}}</td>
+              </ng-container>
+
+              <!-- Fee Column -->
+              <ng-container matColumnDef="contact">
+                <th mat-header-cell *matHeaderCellDef>Contact</th>
+                <td mat-cell *matCellDef="let row">{{ row?.contact }}</td>
+              </ng-container>
+
+              <!-- Minimum Registraion fee Column -->
+              <ng-container matColumnDef="jobTitle">
+                <th mat-header-cell *matHeaderCellDef>Job Title</th>
+                <td mat-cell *matCellDef="let row">{{ row?.jobTitle}}</td>
+              </ng-container>
+
+               <!-- Duration Column -->
+               <ng-container matColumnDef="joiningDate">
+                <th mat-header-cell *matHeaderCellDef>Joining Date</th>
+                <td mat-cell *matCellDef="let row">{{ row?.joiningDate | date }}</td>
+              </ng-container>
+
+               <!-- Detail Column -->
+               <!-- <ng-container matColumnDef="detail">
+                <th mat-header-cell *matHeaderCellDef>Detail</th>
+                <td mat-cell *matCellDef="let row" width="200px">{{ row?.detail}}</td>
+              </ng-container> -->
+
+              <!-- <ng-container matColumnDef="createdAt">
+                <th mat-header-cell *matHeaderCellDef>Created At</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ row?.createdAt | date }}
+                </td>
+              </ng-container> -->
+
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let row">
+                  <mat-slide-toggle
+                    [checked]="row.status"
+                    (change)="changeEmployeeStatus($event, row._id)"
+                  >
+                  </mat-slide-toggle>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>Action</th>
+                <td mat-cell *matCellDef="let row">
+                  <a href="javascript:void(0)" [routerLink]="['/admin/employee/edit',row?._id]"
+                    ><mat-icon aria-hidden="false">edit_outline</mat-icon></a
+                  >
+                  <a href="javascript:void(0)" [routerLink]="['/admin/employee/view',row?._id]"
+                    ><mat-icon aria-hidden="false">visibility</mat-icon></a
+                  >
+                  <a  *appHasRole="['EMPLOYEE-DELETE']"
+                    title="Delete"
+                    (click)="openDeleteDialog(row._id)"
+                    href="javascript:void(0)"
+                  >
+                    <mat-icon aria-hidden="false">delete_outline</mat-icon>
+                  </a>
+                </td>
+              </ng-container>
+  
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  
+              <!-- Row shown when there is no matching data. -->
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell text-center" colspan="12">
+                  <strong>No data</strong>
+                </td>
+              </tr>
+            </table>
+  
+            <mat-paginator
+              #paginator
+              [length]="total"
+              [pageSize]="10"
+              (page)="getAllEmployee($event)"
+            ></mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

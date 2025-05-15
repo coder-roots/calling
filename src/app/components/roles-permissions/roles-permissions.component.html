@@ -1,0 +1,47 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <h4 class="page-title">Role</h4>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Role</li>
+    </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW-1 -->
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <h3 class="card-title">Role List</h3>
+                <button class="btn btn-primary btn-sm" [routerLink]="['/admin/roles/add']">+ Add Role</button>
+            </div>
+            <div class="row ml-2 mt-4 mr-2">
+                <div class="col-md-12" *ngFor="let role of roleData">
+                  <div class="card">
+                    <div class="card-body text-center">
+                      <!-- <blockquote class="quote"> -->
+                      <p> <strong>Role Name : </strong> {{role['name']}}</p>
+                      <span *ngFor="let per of role['permissions']" class="badge badge-primary mr-2 mb-2">{{per}}</span>
+                      <br>
+                      <div class="row d-block m-auto">
+                        <small class="text-muted mr-2">
+                            <a class="btn btn-sm btn-outline-primary" [routerLink]="['/admin/roles/edit', role['_id']]">Edit</a>
+                          </small>
+                          <small class="mr-2">
+                            <a class="btn btn-sm btn-outline-danger" (click) = "openDeleteDialog(role._id)">Delete</a>
+                          </small>
+                          <small class="mr-2">
+                            <a class="btn btn-sm btn-outline-warning" (click) = "copyRole(role)">Copy</a>
+                          </small>
+                      </div>
+                      <!-- </blockquote> -->
+                    </div>
+                  </div>
+                </div><!-- COL END -->
+              </div>
+            <!-- table-responsive -->
+        </div>
+    </div>
+</div>
+<!-- ROW-1 CLOSED -->

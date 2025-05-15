@@ -1,0 +1,12 @@
+th{
+	color: #212529 !important;
+}
+.blink {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}

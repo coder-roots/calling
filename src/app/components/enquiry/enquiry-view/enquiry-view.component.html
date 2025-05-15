@@ -1,0 +1,264 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <h4 class="page-title">Enquiry</h4>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Enquiry</li>
+    </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <h4 class="card-title">View Enquiry Detail</h4>
+                <button mat-icon-button [matMenuTriggerFor]="beforeMenu" aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #beforeMenu="matMenu" xPosition="before">
+                  <ng-container *ngIf="enquiryData?.isDrop!=true">
+                    <button mat-menu-item *ngIf="!enquiryData?.isAdmissionConfirmed"
+                        [routerLink]="['/admin/enquiry/calculateFee', enquiryData?._id]">
+                        <mat-icon>payment</mat-icon> <span> Confirm Admission </span>
+                    </button>
+                    <button mat-menu-item *ngIf="enquiryData?.isFeeCalculated"
+                        [routerLink]="['/admin/enquiry/viewFee', enquiryData?._id]">
+                        <mat-icon>visibility</mat-icon> <span>Last Calculated Fee</span>
+                    </button>
+                    <!-- <button mat-menu-item (click)="openConfirmAdmissionDialog(enquiryData?._id)" *ngIf="!enquiryData?.isAdmissionConfirmed && enquiryData?.isFeeCalculated">
+                        <mat-icon style="font-size: 15px;">verified_user</mat-icon>
+                        <span>Confirm Admission</span>
+                    </button> -->
+                    <button mat-menu-item [routerLink]="['/admin/enquiry/edit',enquiryId]">
+                        <mat-icon style="font-size: 15px;">edit</mat-icon> <span>Edit</span>
+                    </button>
+                    <button mat-menu-item (click)="openDialog('')">
+                        <mat-icon style="font-size: 15px;">call</mat-icon> <span>Add Call</span>
+                    </button>
+                    </ng-container>
+                </mat-menu>
+              </div>
+              <span class="p-2 blink" style="background-color: red; color:white;" *ngIf="enquiryData?.isDrop==true">Already Dropped</span>
+            <!-- <span *ngIf="enquiryData?.isAdmissionConfirmed">Admission Confirmed</span> -->
+            <div class="mt-2">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important; height:50px;" colspan="4">
+                                Personal Details
+                                <button mat-raised-button color="secondary" matBadge="8" matBadgePosition="before"
+                                    matBadgeColor="accent" *ngIf="enquiryData?.isNewStudent">
+                                    New Student
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th width="25%">Name</th>
+                            <td width="25%">{{enquiryData?.studentName}}</td>
+                            <th width="25%">Email</th>
+                            <td width="25%">
+                                {{enquiryData?.email}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Personal Contact</th>
+                            <td>{{enquiryData?.personalContact}}</td>
+                            <th>Parent's Contact</th>
+                            <td>{{enquiryData?.parentsContact}}</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="mt-2">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important;height:50px;" colspan="4">
+                                Qualifications
+                                <button mat-raised-button color="secondary" matBadge="8" matBadgePosition="before"
+                                    matBadgeColor="accent" *ngIf="enquiryData?.isOfficialTraining">
+                                    Official Training
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th width="25%">College</th>
+                            <td width="25%">{{enquiryData?.college?.name}}</td>
+                            <th width="25%">College Course</th>
+                            <td width="25%">
+                                {{enquiryData?.collegeCourseId?.name}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th *ngIf="!enquiryData?.isOfficialTraining">Passout Student</th>
+                            <td *ngIf="!enquiryData?.isOfficialTraining">
+                                <button mat-raised-button color="primary" matBadge="8" matBadgePosition="before"
+                                    matBadgeColor="accent" *ngIf="enquiryData?.isPassout">
+                                    Yes
+                                </button>
+                            </td>
+                            <th *ngIf="enquiryData?.isOfficialTraining">Semester</th>
+                            <td *ngIf="enquiryData?.isOfficialTraining">{{enquiryData?.semester}}</td>
+                            <th *ngIf="enquiryData?.isOfficialTraining">Training</th>
+                            <td *ngIf="enquiryData?.isOfficialTraining">{{enquiryData?.trainingType}}</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="mt-2">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important;height:50px;" colspan="4">
+                                Enquiry Information
+                                <!-- <button mat-raised-button color="secondary" matBadge="8" matBadgePosition="before"
+                                    matBadgeColor="accent" *ngIf="enquiryData?.isOfficialTraining">
+                                    Official Training
+                                </button> -->
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th width="25%">Management Person</th>
+                            <td width="25%">{{enquiryData?.managementPersonId?.name}}</td>
+                            <th width="25%">Admission Confirmed</th>
+                            <td width="25%">
+                                <span *ngIf="enquiryData?.isAdmissionConfirmed"> Yes </span>
+                                <span *ngIf="!enquiryData?.isAdmissionConfirmed"> No </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Comments</th>
+                            <td>
+                                {{enquiryData?.comments}}
+                            </td>
+                            <th>Date</th>
+                            <td>{{enquiryData?.createdAt | date}}</td>
+                        </tr>
+                        <tr>
+                            <th>company</th>
+                            <td>
+                                {{enquiryData?.company}}
+                            </td>
+
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <br><br>
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="card-title">Course(s)</h3>
+                </div>
+            </div>
+            <div class="mt-2" *ngFor="let i of enquiryData?.technologies; let count = index">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important;height:50px;" colspan="4">
+                                {{count+1}}. {{i.course.name}}
+                                <button mat-raised-button color="secondary" matBadge="8" matBadgePosition="before"
+                                    matBadgeColor="accent">
+                                    {{i.duration}}
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th width="25%">Enquiry Taken By</th>
+                            <td width="25%">
+                              <ng-container *ngFor="let itr of i?.enquiryTakenBy">
+                                {{itr?.name}}&nbsp;&nbsp;&nbsp;
+                              </ng-container>
+                            </td>
+                            <th width="25%">Installments</th>
+                            <td width="25%">{{i?.installments}}</td>
+                        </tr>
+                        <tr>
+                            <th>Course Fee</th>
+                            <td>
+                                {{i?.fee | currency:"INR"}}
+                            </td>
+                            <th>Minimum Registration</th>
+                            <td>{{i?.minimumRegistrationFee | currency:"INR"}}</td>
+                        </tr>
+                        <tr>
+                            <th width="25%">Course Discount</th>
+                            <td width="25%">{{i?.discount | currency:"INR"}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="card-title">Call(s)</h3>
+                </div>
+            </div>
+            <div class="mt-2">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important;height:50px;width:25%">Caller Name
+                            </th>
+                            <th class="bg-primary" style="color: white !important;height:50px;width:25%">Call Date</th>
+                            <th class="bg-primary" style="color: white !important;height:50px;width:50%">Call Status
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let i of calls; let count = index">
+                            <td>{{i?.callerName}}</td>
+                            <td>{{i?.callDate | date}}&nbsp; &nbsp;
+                                {{i?.callDate | date:'shortTime'}}
+                            </td>
+                            <td>{{i?.callStatus}}</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="d-flex justify-content-center" *appHasRole="['DROP-MANAGE']">
+              <ng-container *ngIf="enquiryData?.isAdmissionConfirmed==false">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" *ngIf="(enquiryData.isDrop==null || enquiryData.isDrop==false)">
+                  Drop Enquiry
+                </button>
+              </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <textarea [rows]="5" placeholder="Enter the Drop Reason" class="border border-1" [formControl]="dropReason" class="w-100 border border-1"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="dropReason.value==null" (click)="dropEnquiry()">Drop</button>
+      </div>
+    </div>
+  </div>
+</div>

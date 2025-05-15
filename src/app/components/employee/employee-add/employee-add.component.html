@@ -1,0 +1,387 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <h4 class="page-title">{{ type }} Client</h4>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/admin/employees']">Employee</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ type }} Employee
+        </li>
+    </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW-1 -->
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div>
+                    <h3 class="card-title">{{ type }} Employee</h3>
+                </div>
+
+                <div class="row">
+                    <button class="btn btn-primary btn-sm mr-2" [routerLink]="['/admin/employees']">
+                        Employee List
+                    </button>
+                </div>
+            </div>
+            <div class="mt-4 p-3">
+                <form [formGroup]="employeeForm">
+                    <div class="row">
+                        <!-- name -->
+                        <div class="col-md-4 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Employee Name</mat-label>
+                                <input matInput placeholder="Employee name" formControlName="name" />
+                                <mat-error *ngIf="employeeForm.get('name')?.hasError('required')">
+                                    Please enter employee name.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- email -->
+                        <div class="col-md-4 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Email</mat-label>
+                                <input type="text" matInput placeholder="Email" formControlName="email" />
+                                <mat-error *ngIf="
+                      employeeForm.get('email')?.hasError('required') ||
+                      employeeForm.get('email')?.hasError('email')
+                    ">
+                                    Please enter valid email.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- contact -->
+                        <div class="col-md-4 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Contact</mat-label>
+                                <input type="number" matInput placeholder="Contact" formControlName="contact" />
+                                <mat-error *ngIf="employeeForm.get('contact')?.hasError('required')">
+                                    Please enter a contact.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- family contact -->
+                        <!-- <div class="col-md-4 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Family Contact</mat-label>
+                                <input type="number" matInput placeholder="Family Contact"
+                                    formControlName="familyContact" />
+                                <mat-error *ngIf="employeeForm.get('familyContact')?.hasError('required')">
+                                    Please enter a family contact.
+                                </mat-error>
+                            </mat-form-field>
+                        </div> -->
+                        <!-- address -->
+                        <div class="col-md-4 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Address</mat-label>
+                                <input type="text" matInput placeholder="Address" formControlName="address" />
+                                <mat-error *ngIf="employeeForm.get('address')?.hasError('required')">
+                                    Please enter address.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- aadhar no -->
+                        <div class="col-md-4 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Aadhar Card No.</mat-label>
+                                <input type="number" matInput placeholder="Aadhar Card No."
+                                    formControlName="aadharCard" />
+                                <mat-error *ngIf="employeeForm.get('aadharCard')?.hasError('required')">
+                                    Please enter Aadhar Card No.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- pan no -->
+                        <div class="col-md-4 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>PAN No.</mat-label>
+                                <input type="text" matInput placeholder="PAN No." formControlName="panNo" />
+                                <mat-error *ngIf="employeeForm.get('panNo')?.hasError('required')">
+                                    Please enter PAN no.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- special interests -->
+                        <!-- <div class="col-md-4 mt-5">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Special Interests</mat-label>
+                                <input type="text" matInput placeholder="special Interests"
+                                    formControlName="specialInterests" />
+                                <mat-error *ngIf="employeeForm.get('specialInterests')?.hasError('required')">
+                                    Please enter PAN no.
+                                </mat-error>
+                            </mat-form-field>
+                        </div> -->
+                        <!-- birth date -->
+                        <div class="col-md-4 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Choose birth date</mat-label>
+                                <input matInput [matDatepicker]="picker" formControlName="birthDate">
+                                <mat-hint>MM/DD/YYYY</mat-hint>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            Job Detail
+                        </div>
+                        <!-- Job title -->
+                        <div class="col-md-4 mt-5">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Job Title</mat-label>
+                                <input type="text" matInput placeholder="Job Title" formControlName="jobTitle" />
+                                <mat-error *ngIf="employeeForm.get('jobTitle')?.hasError('required')">
+                                    Please job title.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- Employee ID -->
+                        <div class="col-md-4 mt-5">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Employee ID</mat-label>
+                                <input type="text" matInput placeholder="Employee ID" formControlName="employeeId" />
+                                <mat-error *ngIf="employeeForm.get('employeeId')?.hasError('required')">
+                                    Please Employee ID.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- Department -->
+                        <div class="col-md-4 mt-5">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Department</mat-label>
+                                <input type="text" matInput placeholder="Department" formControlName="department" />
+                                <mat-error *ngIf="employeeForm.get('department')?.hasError('required')">
+                                    Please Department.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- Supervisor -->
+                        <div class="col-md-4 mt-3">
+                            <ng-select formControlName="supervisor">
+                                <ng-option value="">Supervisor</ng-option>
+                                <ng-option *ngFor="let i of employeeList" [value]="i._id">
+                                  {{i?.name}} {{i?.email}}
+                                </ng-option>
+                              </ng-select>
+                        </div>
+                        <!-- Work Location -->
+                        <div class="col-md-4 mt-5">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Work Location</mat-label>
+                                <input type="text" matInput placeholder="Work Location"
+                                    formControlName="workLocation" />
+                                <mat-error *ngIf="employeeForm.get('workLocation')?.hasError('required')">
+                                    Please Work Location.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- Work Email -->
+                        <div class="col-md-4 mt-5">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Work Email</mat-label>
+                                <input type="text" matInput placeholder="Work Email" formControlName="workEmail" />
+                                <mat-error *ngIf="employeeForm.get('workEmail')?.hasError('required')">
+                                    Please Work Email.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- Work Number -->
+                        <!-- <div class="col-md-4 mt-5">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Work Number</mat-label>
+                                <input type="text" matInput placeholder="Work Number" formControlName="workNumber" />
+                                <mat-error *ngIf="employeeForm.get('workNumber')?.hasError('required')">
+                                    Please Work Number.
+                                </mat-error>
+                            </mat-form-field>
+                        </div> -->
+                        <!-- Start date Salary -->
+                        <div class="col-md-4 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Start date Salary</mat-label>
+                                <input type="text" matInput placeholder="Start date Salary"
+                                    formControlName="startDateSalary" />
+                                <mat-error *ngIf="employeeForm.get('startDateSalary')?.hasError('required')">
+                                    Please Start date Salary.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- joining date -->
+                        <div class="col-md-4 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>JoiningDate</mat-label>
+                                <input matInput [matDatepicker]="picker1" formControlName="joiningDate">
+                                <mat-hint>MM/DD/YYYY</mat-hint>
+                                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                <mat-datepicker #picker1></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <!-- <div class="col-md-12">
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Detail</mat-label>
+                                <textarea matInput formControlName="detail"></textarea>
+                                <mat-error *ngIf="employeeForm.get('detail')?.hasError('required')">
+                                    Please enter detail.
+                                </mat-error>
+                            </mat-form-field>
+                        </div> -->
+                        <div class="col-12">
+                            Emergency Contact
+                        </div>
+
+                        <!-- name -->
+                        <div class="col-md-4 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Name</mat-label>
+                                <input matInput placeholder="name" formControlName="personName" />
+                                <mat-error *ngIf="employeeForm.get('personName')?.hasError('required')">
+                                    Please enter name.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- address -->
+                        <div class="col-md-4 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Address</mat-label>
+                                <input type="text" matInput placeholder="Address" formControlName="personAddress" />
+                                <mat-error *ngIf="
+                      employeeForm.get('personAddress')?.hasError('required') ||
+                      employeeForm.get('personAddress')?.hasError('personAddress')
+                    ">
+                                    Please enter valid Address.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- contact -->
+                        <div class="col-md-4 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Contact</mat-label>
+                                <input type="number" matInput placeholder="Contact" formControlName="personContact" />
+                                <mat-error *ngIf="employeeForm.get('personContact')?.hasError('required')">
+                                    Please enter a contact.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- relationship -->
+                        <div class="col-md-4 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Relationship</mat-label>
+                                <input type="text" matInput placeholder="Relationship"
+                                    formControlName="relationship" />
+                                <mat-error *ngIf="employeeForm.get('relationship')?.hasError('required')">
+                                    Please enter a Relationship.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- address -->
+                        <div class="col-md-4 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Health Condition</mat-label>
+                                <input type="text" matInput placeholder="healthCondition" formControlName="healthCondition" />
+                                <mat-error *ngIf="employeeForm.get('healthCondition')?.hasError('required')">
+                                    Please enter healthCondition.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-12">Other</div>
+                        <div class="d-flex col-md-4 align-items-center py-5">
+                            <mat-label>Marital Status</mat-label> &nbsp;&nbsp;
+                            <mat-radio-group aria-label="Select Employee Type" formControlName="maritalStatus"
+                                aria-labelledby="example-radio-group-label" class="example-radio-group">
+                                <mat-radio-button value="Unmarried">Unmarried</mat-radio-button>
+                                <mat-radio-button value="Married">Married</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                        <div class="col-md-4 mt-5">
+                            <mat-form-field appearance="legacy" *ngIf="employeeForm.value.maritalStatus=='Married'">
+                                <mat-label>Spouse Name</mat-label>
+                                <input type="text" matInput placeholder="Job Title" formControlName="spouseName" />
+                                <mat-error *ngIf="employeeForm.get('spouseName')?.hasError('required')">
+                                    Please job title.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4 mt-5">
+                            <mat-form-field appearance="legacy" *ngIf="employeeForm.value.maritalStatus=='Married'">
+                                <mat-label>Spouse Employer</mat-label>
+                                <input type="text" matInput placeholder="Job Title" formControlName="spouseEmployer" />
+                                <mat-error *ngIf="employeeForm.get('spouseEmployer')?.hasError('required')">
+                                    Please job title.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- learning Instituions -->
+                        <div class="col-md-12" formArrayName="learningInstitutions">
+                            Learning Institution(s)
+                            <div class="" *ngFor="let tech of learningInstitutions.controls; let index = index"
+                                [formGroupName]="index">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="legacy">
+                                            <mat-label>Course</mat-label>
+                                            <input matInput placeholder="Course" formControlName="course" />
+                                            <mat-error *ngIf="employeeForm.get('course')?.hasError('required')">
+                                                Please enter Course.
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="legacy">
+                                            <mat-label>Institution</mat-label>
+                                            <input matInput placeholder="Institution" formControlName="institution" />
+                                            <mat-error *ngIf="employeeForm.get('institution')?.hasError('required')">
+                                                Please enter Institution.
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-primary btn-sm mx-2"
+                                            (click)="addLearningInstitution($event)">
+                                            + Add
+                                        </button>
+                                        <button type="button" class="btn btn-primary btn-sm mx-2"
+                                            (click)="removeLearningInstitution(index)">
+                                            - Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- picture -->
+                        <div class="col-md-12 my-3">
+                            <mat-label>Upload Employee Picture</mat-label> &nbsp; &nbsp;
+                            <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
+                            <input hidden (change)="uploadImage($event)" #fileInput type="file" id="file">
+                            {{fileName}}
+                        </div>
+
+                    </div>
+
+                    
+
+                    <button class="btn btn-primary d-block m-auto" (click)="submit()" tabindex="1"
+                        [disabled]="employeeForm.invalid">
+                        {{ type }} Employee
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

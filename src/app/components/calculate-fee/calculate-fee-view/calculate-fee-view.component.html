@@ -1,0 +1,156 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <h4 class="page-title">View fee</h4>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">View Fee</li>
+    </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW-1 -->
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <h3 class="card-title">Course List</h3>
+                <div>
+                    <!-- <button class="btn btn-primary mx-2" *ngIf="!enquiryData?.isAdmissionConfirmed" (click)="openDialog(enquiryData?._id)">Confirm Admission</button> -->
+                    <button class="btn btn-primary mx-2" (click)="printDetail()">Print</button>
+                </div>
+                
+            </div>
+            <!-- course List -->
+            <div>
+
+
+                <table mat-table [dataSource]="dataSource" class="table card-table table-vcenter mat-elevation-z8">
+                    <!-- AutoId Column -->
+                    <ng-container matColumnDef="index">
+                        <th mat-header-cell *matHeaderCellDef>Sr. No</th>
+                        <td mat-cell *matCellDef="let row; let i = index">{{ i+1 }}</td>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>Course</th>
+                        <td mat-cell *matCellDef="let row">{{ row?.course.name }}</td>
+                    </ng-container>
+
+                    <!-- Course Type Column -->
+                    <ng-container matColumnDef="courseType">
+                        <th mat-header-cell *matHeaderCellDef>Course Type</th>
+                        <td mat-cell *matCellDef="let row">
+                            <span *ngIf="row?.course.courseType == '1'">Single</span>
+                            <span *ngIf="row?.course.courseType == '2'">Combo</span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Fee Column -->
+                    <ng-container matColumnDef="fee">
+                        <th mat-header-cell *matHeaderCellDef>Course Fee</th>
+                        <td mat-cell *matCellDef="let row">{{ row?.fee | currency:"INR" }}</td>
+                    </ng-container>
+
+                    <!-- Minimum Registraion fee Column -->
+                    <ng-container matColumnDef="minimumRegistrationFee">
+                        <th mat-header-cell *matHeaderCellDef>Minimum Registration</th>
+                        <td mat-cell *matCellDef="let row">{{ row?.minimumRegistrationFee | currency:"INR"}}</td>
+                    </ng-container>
+
+                    <!-- Duration Column -->
+                    <ng-container matColumnDef="duration">
+                        <th mat-header-cell *matHeaderCellDef>Duration</th>
+                        <td mat-cell *matCellDef="let row">{{ row?.duration }}</td>
+                    </ng-container>
+
+
+                    <!-- <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>Action</th>
+                  <td mat-cell *matCellDef="let row">
+                    <a href="javascript:void(0)" [routerLink]="['/admin/course/edit',row?._id]"
+                      ><mat-icon aria-hidden="false">edit_outline</mat-icon></a>
+                  </td>
+                </ng-container> -->
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+                    <!-- Row shown when there is no matching data. -->
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell text-center" colspan="12">
+                            <strong>No data</strong>
+                        </td>
+                    </tr>
+                </table>
+
+
+            </div>
+
+            <!-- fee detail -->
+            <div class="mt-4 p-3">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important;height:50px;" colspan="2">
+                                Fee Detail
+                            </th>
+                            <th class="bg-primary" style="color: white !important;height:50px; text-align:right"
+                                colspan="2">
+                                <button mat-raised-button color="secondary" matBadge="8" matBadgePosition="before"
+                                    matBadgeColor="accent">
+                                    Enquiry Date : {{enquiryData?.enquiryDate | date}}
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td width="25%">Total Fee Applicable</td>
+                            <td width="25%">{{feeData?.totalFeesApplicable | currency :"INR"}}</td>
+                            <td width="25%">Discount</td>
+                            <td width="25%">{{feeData?.discount | currency :"INR"}}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Fee to be paid</td>
+                            <td><b>{{feeData?.totalFeeToBePaid | currency :"INR"}}</b></td>
+                            <td>Total Registration</td>
+                            <td>{{feeData?.registrationFeePayable | currency :"INR"}}</td>
+                        </tr>
+                        <tr>
+                            <td>Registration Paid</td>
+                            <td>{{feeData?.registrationFeePaid | currency :"INR"}}</td>
+                            <td>Pending Registration</td>
+                            <td><b>{{feeData?.registrationFeePending | currency :"INR"}}</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important;height:50px;" colspan="2">
+                                Installments
+                            </th>
+                            <th class="bg-primary" style="color: white !important;height:50px; text-align:right"
+                                colspan="2">
+                                <button mat-raised-button color="secondary" matBadge="8" matBadgePosition="before"
+                                    matBadgeColor="accent">
+                                    Course Start Date : {{feeData?.courseStartDate | date}}
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let i of feeData?.installments; let index= index">
+                            <td width="25%">Installment</td>
+                            <td width="25%"><b>{{i?.installmentNo}}</b></td>
+                            <td width="25%">Amount</td>
+                            <td width="25%"><b>{{i?.amountToBePaid | currency :"INR"}}</b></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>

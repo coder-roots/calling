@@ -1,0 +1,218 @@
+
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <h4 class="page-title">{{ type }} Admission</h4>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/admin/admissions']">Admission</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ type }} Admission
+        </li>
+    </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW-1 -->
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div>
+                    <h3 class="card-title">{{ type }} Admission</h3>
+                </div>
+
+                <div class="row">
+                    <button class="btn btn-primary btn-sm mr-2" [routerLink]="['/admin/admissions']">
+                        Admission List
+                    </button>
+                </div>
+            </div>
+            <div class="mt-4 p-3">
+                <form [formGroup]="admissionForm">
+                    <div class="row">
+                        <div class="col-md-4 mt-3">
+                            <section class="example-section py-3">
+                                <mat-checkbox class="example-margin" formControlName="isNewStudent">New
+                                    Student</mat-checkbox>
+                            </section>
+                        </div>
+                        <div class="col-md-4">
+                            <div>
+                                <ng-select formControlName="studentId" (change)="selectStudent($event)"
+                                    [readonly]="!!admissionForm.value.isNewStudent">
+                                    <ng-option value="">Choose Student</ng-option>
+                                    <ng-option *ngFor="let i of studentList" [value]="i._id">
+                                        {{i?.studentName}} {{i?.email}}
+                                    </ng-option>
+                                </ng-select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Student Name</mat-label>
+                                <input matInput placeholder="Student name" formControlName="studentName" />
+                                <mat-error *ngIf="admissionForm.get('collegeCourse')?.hasError('required')">
+                                    Please enter Student Name.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Email</mat-label>
+                                <input matInput placeholder="Email" formControlName="email" />
+                                <mat-error *ngIf="admissionForm.get('email')?.hasError('required')">
+                                    Please enter Email.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-4">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Personal Contact</mat-label>
+                                <input type="number" matInput placeholder="Phone" formControlName="personalContact" />
+                                <mat-error
+                                    *ngIf=" admissionForm.get('personalContact')?.hasError('required') || admissionForm.get('personalContact')?.hasError('personalContact')" >
+                                    Please enter valid Contact No.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Parent's Contact</mat-label>
+                                <input type="number" matInput placeholder="Parent's Contact"
+                                    formControlName="parentsContact" />
+                                <mat-error *ngIf="admissionForm.get('parentsContact')?.hasError('required')">
+                                    Please enter parent's Contact.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mt-2">
+                            <section class="example-section">
+                                <mat-checkbox class="example-margin" formControlName="isOfficialTraining">Official
+                                    Training</mat-checkbox>
+                            </section>
+                        </div>
+                        <div class="col-md-4 mt-2">
+                            <section class="example-section">
+                                <mat-checkbox class="example-margin" formControlName="isPassout"
+                                    [disabled]="!!admissionForm.value.isOfficialTraining">Passout
+                                    Student</mat-checkbox>
+                            </section>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-center">
+                            <div class="w-100 pr-2">
+                                <ng-select formControlName="college">
+                                    <ng-option value="">Choose College</ng-option>
+                                    <ng-option *ngFor="let i of collegeList" [value]="i._id">
+                                        {{i?.name}}
+                                    </ng-option>
+                                </ng-select>
+                            </div>
+
+
+                            <button class="btn btn-primary btn-sm mr-2" (click)="openDialog('')">
+                                +
+                            </button>
+                            <!-- <mat-form-field appearance="legacy">
+                                <mat-label>Choose College</mat-label>
+                                <mat-select formControlName="college">
+                                    <mat-option *ngFor="let i of collegeList" [value]="i._id">
+                                        {{i?.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field> -->
+                        </div>
+                        <div class="col-md-4" *ngIf="admissionForm.value.isOfficialTraining">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Choose Training</mat-label>
+                                <mat-select formControlName="trainingType">
+                                    <mat-option value="6 weeks">6 weeks</mat-option>
+                                    <mat-option value="6 months">6 months</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-4">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>College Course</mat-label>
+                                <input type="text" matInput placeholder="College Course"
+                                    formControlName="collegeCourse" />
+                                <!-- <mat-error *ngIf="admissionForm.get('collegeCourse')?.hasError('required')">
+                                    Please enter college Course.
+                                </mat-error> -->
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4" *ngIf="!admissionForm.value.isPassout">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Semester</mat-label>
+                                <input matInput placeholder="Semester" formControlName="semester" />
+                                <mat-error *ngIf="admissionForm.get('semester')?.hasError('required')">
+                                    Please enter Semester.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- <div class="d-flex col-md-4 align-items-center">
+                            <mat-label>Choose Course Type</mat-label> &nbsp; &nbsp;
+                            <mat-radio-group aria-label="Select Course Type" formControlName="courseType"
+                                aria-labelledby="example-radio-group-label" class="example-radio-group">
+                                <mat-radio-button value="1">Single</mat-radio-button>
+                                <mat-radio-button value="2">Combo</mat-radio-button>
+                            </mat-radio-group>
+                        </div> -->
+
+                        <div class="col-md-4">
+                            <!-- <mat-form-field appearance="legacy">
+                                <mat-label>Management Person</mat-label>
+                                <mat-select formControlName="managementPersonId">
+                                    <mat-option *ngFor="let i of employeeList" [value]="i._id">
+                                        {{i?.name}} - {{i?.email}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field> -->
+                            <ng-select formControlName="managementPersonId">
+                                <ng-option value="">Management Person</ng-option>
+                                <ng-option *ngFor="let i of employeeList" [value]="i._id">
+                                    {{i?.name}} - {{i?.email}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+
+                        <div class="col-md-4 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Admission date</mat-label>
+                                <input matInput [matDatepicker]="picker" formControlName="admissionDate">
+                                <mat-hint>MM/DD/YYYY</mat-hint>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+
+
+                        <div class="col-md-4">
+                          <ng-select formControlName="company">
+                              <ng-option value="">Choose Company</ng-option>
+                              <ng-option *ngFor="let company of companies" [value]="company">
+                                {{ company }}
+                              </ng-option>
+                          </ng-select>
+                      </div>
+                    </div>
+
+                   
+                    <button class="btn btn-primary d-block m-auto"  (click)="submit()" tabindex="1"
+                        [disabled]="admissionForm.invalid">
+                       Update Admission
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

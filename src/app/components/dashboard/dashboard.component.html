@@ -1,0 +1,202 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+  <h4 class="page-title">Dashboard</h4>
+</div>
+<!-- PAGE-HEADER END -->
+<!-- ROW-1 -->
+<div class="row p-4">
+  <div class="col-md-12 col-lg-12">
+    <div class="card c-bdr-white p-4">
+      <div class="row card-header d-flex justify-content-between">
+        <h3 class="card-title"></h3>
+        <div class="row">
+          <div class="d-flex text-center mb-4">
+            <!-- <h2 class="mr-5">Details</h2> -->
+            <form
+              *ngIf="showFilter"
+              class="ml-5"
+              [formGroup]="filterForm"
+            ></form>
+          </div>
+          <!-- <h2>Today's</h2> -->
+          <div class="row mt-2">
+            <div class="col-sm-6 col-lg-6 col-xl-4">
+              <div class="card">
+                <div class="card-body iconfont text-left">
+                  <h4 class="mb-3 d-flex">
+                    <i
+          class="side-menu__icon fe fe-help-circle"></i>Today's Enquiries</h4>
+                  <h2 class="mb-1 text-dark display-4 font-weight-bold">
+                    {{ data?.enquiries }}
+                  </h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-6 col-xl-4">
+              <div class="card">
+                <div class="card-body iconfont text-left">
+                  <h4 class="mb-3 d-flex">
+                    <i
+          class="side-menu__icon fe fe-user-check"></i>
+                    Today's Admissions</h4>
+                  <h2 class="mb-1 text-dark display-4 font-weight-bold">
+                    {{ data.admissions }}
+                  </h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-6 col-xl-4">
+              <div class="card">
+                <div class="card-body iconfont text-left">
+                  <h4 class="mb-3 d-flex">
+                    <i
+          class="side-menu__icon fe fe-phone-call"></i>
+                    Today's Calls
+                  </h4>
+                  <h2 class="mb-1 text-dark display-4 font-weight-bold">
+                    {{ data.calls }}
+                  </h2>
+                </div>
+              </div>
+            </div>
+            
+
+           
+            <!-- <div class="col-sm-6 col-lg-6 col-xl-3">
+              <div class="card">
+                <div class="card-body iconfont text-left">
+                  <h4 class="mb-3 d-flex">
+                    <i
+                      class="fa fa-file-text-o fa-lg pr-2 d-flex align-items-middle text-danger"
+                      aria-hidden="true"
+                    ></i>
+                    Total Collection
+                  </h4>
+                  <h2 class="mb-1 text-dark display-4 font-weight-bold">
+                    {{ data.totalPaymentsReceived | currency : "INR" }}
+                  </h2>
+                </div>
+              </div>
+            </div> -->
+            <!-- <div class="col-sm-6 col-lg-6 col-xl-3">
+              <div class="card">
+                <div class="card-body iconfont text-left">
+                  <h4 class="mb-3 d-flex">Pending Rents</h4>
+                  <h2 class="mb-1 text-dark display-4 font-weight-bold">0</h2>
+                </div>
+              </div>
+            </div> -->
+            <!-- <div class="col-sm-6 col-lg-6 col-xl-3">
+              <div class="card">
+                <div class="card-body iconfont text-left">
+                  <h4 class="mb-3 d-flex">
+                    <i
+                      class="fa fa-podcast fa-lg pr-2 d-flex align-items-middle text-info"
+                      aria-hidden="true"
+                    ></i
+                    >Podcasts
+                  </h4>
+                  <h2 class="mb-1 text-dark display-4 font-weight-bold">
+                    {{ data.todayPodcasts }}
+                  </h2>
+                </div>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="row p-4">
+        <div class="bg bg-primary text-white p-3">Today's Enquiries</div>
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          class="table card-table table-vcenter mat-elevation-z8"
+        >
+          <!-- AutoId Column -->
+          <ng-container matColumnDef="enquiryAutoId">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let row">#{{ row.enquiryAutoId }}</td>
+        </ng-container>
+        <!-- Enquiry Type Column -->
+        <ng-container matColumnDef="isConfirmed">
+            <th mat-header-cell *matHeaderCellDef>Confirmed</th>
+            <td mat-cell *matCellDef="let row">
+                <span *ngIf="row?.isAdmissionConfirmed == true">
+                    <button mat-raised-button color="primary" matBadge="8" matBadgePosition="before"
+                        matBadgeColor="accent"> Yes
+                    </button>
+                </span>
+                <span *ngIf="row?.isAdmissionConfirmed == false">
+                    <button mat-raised-button color="secondary" matBadge="8" matBadgePosition="before"
+                        matBadgeColor="accent"> No
+                    </button>
+                </span>
+            </td>
+        </ng-container>
+
+       
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="stuName">
+            <th mat-header-cell *matHeaderCellDef>Student Name</th>
+            <td mat-cell *matCellDef="let row">{{ row?.studentName }}</td>
+        </ng-container>
+
+         <!-- Image Column -->
+         <ng-container matColumnDef="info">
+            <th mat-header-cell *matHeaderCellDef>Information</th>
+            <td mat-cell *matCellDef="let row">
+                <i class="side-menu__icon fe fe-phone"></i> {{row?.personalContact}} <br/>
+                <i class="side-menu__icon fe fe-mail"></i> {{row?.email}}
+            </td>
+        </ng-container>
+
+        <!-- Courses Column -->
+        <ng-container matColumnDef="courses">
+            <th mat-header-cell *matHeaderCellDef>Courses</th>
+            <td mat-cell *matCellDef="let row">
+                <ul>
+                    <li *ngFor="let i of row?.technologies">{{i?.course?.name}}</li>
+                </ul>
+                <!-- <p></p> -->
+            </td>
+        </ng-container>
+
+        <!-- Duration Column -->
+        <ng-container matColumnDef="management">
+            <th mat-header-cell *matHeaderCellDef>Management Person</th>
+            <td mat-cell *matCellDef="let row">{{ row?.managementPersonId?.name }}</td>
+        </ng-container>
+
+        <!-- CreatedAt Column -->
+
+        <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef>Created At</th>
+            <td mat-cell *matCellDef="let row">
+                {{ row?.createdAt | date:'shortTime' }}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let row">
+                
+                <a [routerLink]="['/admin/enquiry/view',row?._id]">
+                    <mat-icon aria-hidden="false" matTooltip="View Detail">visibility</mat-icon>
+                </a>
+            </td>
+        </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell text-center" colspan="12">
+              <strong>No data</strong>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

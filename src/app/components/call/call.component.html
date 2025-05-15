@@ -1,0 +1,284 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <h4 class="page-title">Calling</h4>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Calling</li>
+    </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW-1 -->
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <h3 class="card-title">Calling List</h3>
+                <span>
+                    <button class="btn btn-primary btn-sm mx-2" *ngIf="" (click)="generateExcel()">Generate
+                        Excel</button>
+
+                    <button class="btn btn-primary btn-sm mx-2" routerLink="/admin/call/add-sheet" *ngIf="tabIndex==2">
+                        + Add Call Sheet
+                    </button>
+                    <button class="btn btn-primary btn-sm mx-2" [routerLink]="['/admin/call/add-multiple', 'enquiry']"
+                        *ngIf="tabIndex==0">
+                        + Add Enquiry Calls
+                    </button>
+                    <button class="btn btn-primary btn-sm mx-2" [routerLink]="['/admin/call/add-multiple', 'admission']"
+                        *ngIf="tabIndex==1">
+                        + Add Admission Calls
+                    </button>
+                </span>
+
+            </div>
+            <div>
+                <div class="input-group p-5">
+                    <div class="row">
+                        <div class="col-md-4" *ngIf="tabIndex==2">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Choose Company</mat-label>
+                                <mat-select (selectionChange)="makeObj($event, 'company')" [(ngModel)]="company">
+                                    <mat-option value="all" *ngIf="userType==1">All</mat-option>
+                                    <mat-option *ngFor="let company of companies" [value]="company">
+                                        {{ company }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4" *ngIf="tabIndex==2">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Choose College</mat-label>
+                                <mat-select (selectionChange)="makeObj($event, 'college')">
+                                    <mat-option value="all">All</mat-option>
+                                    <mat-option *ngFor="let i of collegeList" [value]="i._id">
+                                        {{i?.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Enter a date range</mat-label>
+                                <mat-date-range-input [rangePicker]="picker">
+                                    <input matStartDate placeholder="Start date" [(ngModel)]="start" />
+                                    <input matEndDate placeholder="End date" (dateChange)="dateObj()"
+                                        [(ngModel)]="end" />
+                                </mat-date-range-input>
+                                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #picker></mat-date-range-picker>
+                            </mat-form-field>
+                        </div>
+                        <!-- <div class="col-md-6">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Choose Course</mat-label>
+                                <mat-select (selectionChange)="makeObj($event,'course')">
+                                    <mat-option value="all">All</mat-option>
+                                    <mat-option *ngFor="let i of courseList" [value]="i._id">
+                                        {{i?.name}} - <span *ngIf="i?.courseType==1">Single</span><span
+                                            *ngIf="i?.courseType==2">Combo</span>
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <mat-tab-group [selectedIndex]="tabIndex" (selectedTabChange)="tabChange($event)">
+                    <mat-tab label="Enquiry Calling">
+
+                        <table mat-table [dataSource]="dataSource1"
+                            class="table card-table table-vcenter mat-elevation-z8">
+                            <!-- AutoId Column -->
+                            <ng-container matColumnDef="srNo">
+                                <th mat-header-cell *matHeaderCellDef>Sr. No</th>
+                                <td mat-cell *matCellDef="let row; let i = index">{{ i+1 }}</td>
+                            </ng-container>
+
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="calledTo">
+                                <th mat-header-cell *matHeaderCellDef>Student Name</th>
+                                <td mat-cell *matCellDef="let row">{{ row?.enquiryId?.studentName }}</td>
+                            </ng-container>
+                            <!-- courses opted Column -->
+                            <ng-container matColumnDef="courses">
+                                <th mat-header-cell *matHeaderCellDef>Courses</th>
+                                <td mat-cell *matCellDef="let row" style="width: 150px;">
+                                    <ul>
+                                        <li *ngFor="let i of row?.enquiryId?.technologies">{{i?.course?.name}}</li>
+                                    </ul>
+                                    <!-- <p></p> -->
+                                </td>
+                            </ng-container>
+
+                            <!-- contact Column -->
+                            <ng-container matColumnDef="info">
+                                <th mat-header-cell *matHeaderCellDef>Phone</th>
+                                <td mat-cell *matCellDef="let row">
+                                    {{row?.enquiryId?.personalContact}} <br />
+                                    {{row?.enquiryId?.parentsContact}}
+                                </td>
+                            </ng-container>
+
+                            <!-- college Column -->
+                            <ng-container matColumnDef="college">
+                                <th mat-header-cell *matHeaderCellDef>College</th>
+                                <td mat-cell *matCellDef="let row">
+                                    {{row?.enquiryId?.college?.name}} <br />
+                                    {{row?.enquiryId?.collegeCourse}}
+                                </td>
+                            </ng-container>
+
+                            <!-- callerName Column -->
+                            <ng-container matColumnDef="callerName">
+                                <th mat-header-cell *matHeaderCellDef>Caller Name</th>
+                                <td mat-cell *matCellDef="let row">{{row?.callerName}}
+                                </td>
+                            </ng-container>
+                            <!-- status Column -->
+                            <ng-container matColumnDef="callDate">
+                                <th mat-header-cell *matHeaderCellDef>Call Date</th>
+                                <td mat-cell *matCellDef="let row">{{row?.callDate | date}}
+                                </td>
+                            </ng-container>
+                            <!-- status Column -->
+                            <ng-container matColumnDef="callStatus">
+                                <th mat-header-cell *matHeaderCellDef style="width:200px">Call Status</th>
+                                <td mat-cell *matCellDef="let row">{{row?.callStatus}}
+                                </td>
+                            </ng-container>
+
+
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef>Action</th>
+                                <td mat-cell *matCellDef="let row; let i = index">
+
+                                    <a title="Delete"   *appHasRole="['CALL-DELETE']" (click)="openDeleteDialog(row._id)" href="javascript:void(0)">
+                                        <mat-icon aria-hidden="false">delete_outline</mat-icon>
+                                    </a>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+                            <!-- Row shown when there is no matching data. -->
+                            <tr class="mat-row" *matNoDataRow>
+                                <td class="mat-cell text-center" colspan="12">
+                                    <strong>No data</strong>
+                                </td>
+                            </tr>
+                        </table>
+                        <mat-paginator #paginator1 [length]="total1" [pageSize]="10"
+                            (page)="getAllEnquiryCall($event)"></mat-paginator>
+                    </mat-tab>
+                  
+                    <mat-tab label="Call Sheet">
+                        <!-- <div class="input-group p-5">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="legacy">
+                                        <mat-label>Choose College</mat-label>
+                                        <mat-select (selectionChange)="makeObj($event, 'college')">
+                                            <mat-option value="all">All</mat-option>
+                                            <mat-option *ngFor="let i of collegeList" [value]="i._id">
+                                                {{i?.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <table mat-table [dataSource]="dataSource3"
+                            class="table card-table table-vcenter mat-elevation-z8">
+                            <!-- AutoId Column -->
+                            <ng-container matColumnDef="callSheetAutoId">
+                                <th mat-header-cell *matHeaderCellDef>#</th>
+                                <td mat-cell *matCellDef="let row; let i = index">{{row?.callSheetAutoId}}</td>
+                            </ng-container>
+                            <!-- College Column -->
+                            <ng-container matColumnDef="collegeId">
+                                <th mat-header-cell *matHeaderCellDef>College</th>
+                                <td mat-cell *matCellDef="let row">
+                                    {{row?.collegeId?.name}}
+                                </td>
+                            </ng-container>
+
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="course">
+                                <th mat-header-cell *matHeaderCellDef>College Course</th>
+                                <td mat-cell *matCellDef="let row">{{ row?.course }}</td>
+                            </ng-container>
+
+                            <!-- Image Column -->
+                            <ng-container matColumnDef="semester">
+                                <th mat-header-cell *matHeaderCellDef>Semester</th>
+                                <td mat-cell *matCellDef="let row">
+                                    {{row?.semester}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="comments">
+                                <th mat-header-cell *matHeaderCellDef width="150px">Comments</th>
+                                <td mat-cell *matCellDef="let row">{{row?.comments}}</td>
+                            </ng-container>
+
+                            <!-- status Column -->
+                            <ng-container matColumnDef="sheetDate">
+                                <th mat-header-cell *matHeaderCellDef>Call Date</th>
+                                <td mat-cell *matCellDef="let row">
+                                    {{row?.sheetDate | date}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="company">
+                                <th mat-header-cell *matHeaderCellDef>company</th>
+                                <td mat-cell *matCellDef="let row">
+                                    {{row?.company }}
+                                </td>
+                            </ng-container>
+
+                            <!-- <ng-container matColumnDef="detail">
+                                <th mat-header-cell *matHeaderCellDef>Detail</th>
+                                <td mat-cell *matCellDef="let row" width="200px">{{ row?.detail}}</td>
+                            </ng-container> -->
+
+                            <!-- CreatedAt Column -->
+
+
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef>Action</th>
+                                <td mat-cell *matCellDef="let row; let i = index">
+
+                                    <a [routerLink]="['/admin/call/edit-sheet/',row?._id]" style="cursor:pointer">
+                                        <mat-icon aria-hidden="false" matTooltip="Add Call">visibility</mat-icon>
+                                    </a>
+                                    <a title="Delete"   *appHasRole="['CALL-DELETE']" (click)="openDeleteDialogSheet(row._id)" href="javascript:void(0)">
+                                        <mat-icon aria-hidden="false">delete_outline</mat-icon>
+                                    </a>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsForCallSheet"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsForCallSheet"></tr>
+
+                            <!-- Row shown when there is no matching data. -->
+                            <tr class="mat-row" *matNoDataRow>
+                                <td class="mat-cell text-center" colspan="12">
+                                    <strong>No data</strong>
+                                </td>
+                            </tr>
+                        </table>
+                        <mat-paginator #paginator3 [length]="total3" [pageSize]="10"
+                            (page)="getAllCallSheet($event)"></mat-paginator>
+                    </mat-tab>
+                </mat-tab-group>
+
+
+            </div>
+        </div>
+    </div>
+</div>

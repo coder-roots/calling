@@ -1,0 +1,25 @@
+<h1 class="shadow text-center" mat-dialog-title>{{ type }} CollegeCourse</h1>
+
+<!-- <mat-dialog-content> -->
+  <form [formGroup]="collegeCourseForm">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="legacy">
+            <mat-label>CollegeCourse</mat-label>
+            <input matInput placeholder="CollegeCourse" formControlName="name" />
+            <mat-error *ngIf="collegeCourseForm.get('name')?.hasError('required')">
+              Please enter college Course.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <mat-dialog-actions align="center">
+      <button mat-raised-button color="primary" (click)="submit()" tabindex="1">
+        {{ type }} CollegeCourse
+      </button>
+      <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+    </mat-dialog-actions>
+  </form>
+<!-- </mat-dialog-content> -->

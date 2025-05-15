@@ -1,0 +1,27 @@
+<h1 class="shadow text-center" mat-dialog-title>{{ type }} SessionYear</h1>
+
+<!-- <mat-dialog-content> -->
+  <form [formGroup]="sessionYearForm">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="legacy">
+            <mat-label>Session Year</mat-label>
+            <input matInput placeholder="SessionYear" formControlName="name" />
+            <mat-error *ngIf="sessionYearForm.get('name')?.hasError('required')">
+              Please enter sessionYear.
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+
+      </div>
+    </div>
+    <mat-dialog-actions align="center">
+      <button mat-raised-button color="primary" (click)="submit()" tabindex="1">
+        {{ type }} SessionYear
+      </button>
+      <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+    </mat-dialog-actions>
+  </form>
+<!-- </mat-dialog-content> -->

@@ -1,0 +1,381 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <h4 class="page-title">Admission</h4>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/admin/admissions']">Admissions</a></li>
+        <li class="breadcrumb-item active" aria-current="page">View Detail</li>
+    </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+
+
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="d-flex align-items-center ">
+                  <h4 class="card-title m-0">View Admission Detail (#{{admissionData?.admissionAutoId}})</h4>
+                  <span *ngIf="admissionData?.status==false" class="text-danger px-2">Dropped</span>
+                </div>
+                <button mat-icon-button [matMenuTriggerFor]="beforeMenu" aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #beforeMenu="matMenu" xPosition="before">
+                    <button mat-menu-item *ngIf="admissionData?.isFeeCalculated"
+                        [routerLink]="['/admin/admission/viewFee', admissionData?._id]">
+                        View Fee
+                    </button>
+                    <button mat-menu-item (click)="openDialog('')" [disabled]="admissionData?.status==false" >
+                        Add To Batch
+                    </button>
+                    <button mat-menu-item [routerLink]="['/admin/admission/edit',admissionId]" [disabled]="admissionData?.status==false">
+                       Edit
+                    </button>
+                    <button mat-menu-item [routerLink]="['/admin/admission/changeCourse',admissionId]" [disabled]="admissionData?.status==false">
+                       Change Course & Fee
+                    </button>
+                </mat-menu>
+            </div>
+            <!-- personal details -->
+            <div class="mt-2">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important; height:50px;" colspan="4">
+                                Personal Details
+                                <button mat-raised-button color="secondary" matBadge="8" matBadgePosition="before"
+                                    matBadgeColor="accent" *ngIf="admissionData?.isNewStudent">
+                                    New Student
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th width="25%">Name</th>
+                            <td width="25%">{{admissionData?.studentId.studentName}}</td>
+                            <th width="25%">Email</th>
+                            <td width="25%">
+                                {{admissionData?.studentId.email}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Personal Contact</th>
+                            <td>{{admissionData?.studentId.personalContact}}</td>
+                            <th>Parent's Contact</th>
+                            <td>{{admissionData?.studentId.parentsContact}}</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <!-- educational info -->
+            <div class="mt-2">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important;height:50px;" colspan="4">
+                                Qualifications
+                                <button mat-raised-button color="secondary" matBadge="8" matBadgePosition="before"
+                                    matBadgeColor="accent" *ngIf="admissionData?.isOfficialTraining">
+                                    Official Training
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th width="25%">College</th>
+                            <td width="25%">{{admissionData?.college?.name}}</td>
+                            <th width="25%">College Course</th>
+                            <td width="25%">
+                                {{admissionData?.collegeCourse}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th *ngIf="!admissionData?.isOfficialTraining">Passout Student</th>
+                            <td *ngIf="!admissionData?.isOfficialTraining">
+                                    <span *ngIf="admissionData?.isPassout">Yes</span>
+                                    <span *ngIf="!admissionData?.isPassout">No</span>
+                            </td>
+                            <th *ngIf="admissionData?.isOfficialTraining">Semester</th>
+                            <td *ngIf="admissionData?.isOfficialTraining">{{admissionData?.semester}}</td>
+                            <th *ngIf="admissionData?.isOfficialTraining">Training</th>
+                            <td *ngIf="admissionData?.isOfficialTraining">{{admissionData?.trainingType}}</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <!-- .admission info -->
+            <div class="mt-2">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important;height:50px;" colspan="4">
+                                Admission Information
+                                <!-- <button mat-raised-button color="secondary" matBadge="8" matBadgePosition="before"
+                                    matBadgeColor="accent" *ngIf="admissionData?.isOfficialTraining">
+                                    Official Training
+                                </button> -->
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th width="25%">Management Person</th>
+                            <td width="25%">{{admissionData?.managementPersonId?.name}}</td>
+                            <th width="25%">Direct Admission</th>
+                            <td width="25%">
+                                <span *ngIf="admissionData?.isDirectAdmission"> Yes </span>
+                                <span *ngIf="!admissionData?.isDirectAdmission"> No </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Comments</th>
+                            <td>
+                                {{admissionData?.comments}}
+                            </td>
+                            <th>Date</th>
+                            <td>{{admissionData?.createdAt | date}}</td>
+                        </tr>
+                        <tr>
+                            <th>Company</th>
+                            <td>
+                                {{admissionData?.company}}
+                            </td>
+
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <br><br>
+            <!-- courses -->
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="card-title">Course(s)</h3>
+                </div>
+            </div>
+            <!-- courses -->
+            <div class="mt-2" *ngFor="let i of admissionData?.technologies; let count = index">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important;height:50px;" colspan="4">
+                                {{count+1}}. {{i.course.name}}
+                                <button mat-raised-button color="secondary" matBadge="8" matBadgePosition="before"
+                                    matBadgeColor="accent">
+                                    {{i.duration}}
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th width="25%">Demo By</th>
+                            <td width="25%">
+                                <ng-container *ngIf="isArray(i?.enquiryTakenBy)==false">
+                                    {{i?.enquiryTakenBy?.name}}
+                                </ng-container>
+                                <ng-container *ngIf="isArray(i?.enquiryTakenBy)">
+                                  <span *ngFor="let itr of i?.enquiryTakenBy">
+                                    {{itr?.name}}&nbsp;&nbsp;
+                                  </span>
+                                </ng-container>
+                            </td>
+                            <th width="25%">Installments</th>
+                            <td width="25%">{{i?.installments}}</td>
+                        </tr>
+                        <tr>
+                            <th>Course Fee</th>
+                            <td>
+                                {{i?.fee | currency:"INR"}}
+                            </td>
+                            <th>Minimum Registration</th>
+                            <td>{{i?.minimumRegistrationFee | currency:"INR"}}</td>
+                        </tr>
+                        <tr>
+                            <th width="25%">Course Discount</th>
+                            <td width="25%">{{i?.discount | currency:"INR"}}</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <!-- courses -->
+            <div class="mt-2" *ngIf="admissionData?.changeCourseLogs?.length!=0">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important;height:50px;" colspan="4">
+                                Previous Course
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let i of admissionData?.changeCourseLogs">
+                            <th width="25%">Course</th>
+                            <td width="25%">
+                                <p *ngFor="let j of i?.prevTechnologies">{{j?.course?.name}}</p>
+                            </td>
+                            <th width="25%">Date</th>
+                            <td width="25%">{{i?.createdAt | date}}</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+            </div>
+
+
+            <!-- batches -->
+            <div class="card-header d-flex justify-content-between"  *ngIf="admissionData?.batches.length>0">
+                <div class="card-title">
+                    <h3 class="card-title">Batch(s)</h3>
+                </div>
+                <div>
+                    <div class="bg-grey mx-2" style="height:25px; width:25px; float:left"></div>
+                    <span>Completed Batch</span>
+                </div>
+            </div>
+            <div class="mt-2" *ngIf="admissionData?.batches.length>0">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important;">Technology</th>
+                            <th class="bg-primary" style="color: white !important;">Time Slot</th>
+                            <th class="bg-primary" style="color: white !important;">Lab</th>
+                            <th class="bg-primary" style="color: white !important;">Trainer</th>
+                            <th class="bg-primary" style="color: white !important;">Start Date</th>
+                            <th class="bg-primary" style="color: white !important;">Expected Completion</th>
+                            <th class="bg-primary" style="color: white !important;">Completed On</th>
+                            <th class="bg-primary" style="color: white !important;">Change Batch</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let i of admissionData?.batches; let count = index" [ngClass]="i?.batchId?.isComplete ? 'bg-grey' : ''">
+                            <td>{{i?.batchId?.technology?.name}} <mat-icon *ngIf="i?.isCurrentAttendingBatch">star</mat-icon></td>
+                            <td>{{i?.batchId?.timeSlotId?.slot}}</td>
+                            <td>{{i?.batchId?.labId?.name}}</td>
+                            <td>{{i?.batchId?.employeeId?.name}}</td>
+                            <td>{{i?.batchId?.startDate | date}}</td>
+                            <td>{{i?.batchId?.completionDate | date}}</td>
+                            <td>
+                                <span *ngIf="!!i?.batchId?.batchCompleteDate">{{i?.batchId?.batchCompleteDate | date}}</span>
+                                <span *ngIf="!i?.batchId?.batchCompleteDate">Running</span>
+                            </td>
+                            <td><mat-icon *ngIf="i?.isCurrentAttendingBatch" (click)="openDialog(i?.batchId?._id)">shuffle</mat-icon></td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+
+            <!-- calls -->
+            <div class="card-header" *ngIf="calls?.length!=0">
+                <div class="card-title">
+                    <h3 class="card-title">Call(s)</h3>
+                </div>
+            </div>
+            <div class="mt-2" *ngIf="calls?.length!=0">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important;height:50px;width:25%">Caller Name
+                            </th>
+                            <th class="bg-primary" style="color: white !important;height:50px;width:25%">Call Date</th>
+                            <th class="bg-primary" style="color: white !important;height:50px;width:50%">Call Status
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let i of calls; let count = index">
+                            <td>{{i?.callerName}}</td>
+                            <td>
+                                {{i?.callDate | date}}&nbsp; &nbsp;
+                                {{i?.callDate | date:'shortTime'}}
+                            </td>
+                            <td>{{i?.callStatus}}</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+
+
+            <!-- certificates -->
+            <div class="card-header" *ngIf="certificates?.length!=0">
+                <div class="card-title">
+                    <h3 class="card-title">Certificate(s)</h3>
+                </div>
+            </div>
+            <div class="mt-2" *ngIf="certificates?.length!=0">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important;height:50px;width:20%">Collected By
+                            </th>
+                            <th class="bg-primary" style="color: white !important;height:50px;width:20%">Given By</th>
+                            <th class="bg-primary" style="color: white !important;height:50px;width:20%">Comments
+                            </th>
+                            <th class="bg-primary" style="color: white !important;height:50px;width:20%">Created At
+                            </th>
+                            <th class="bg-primary" style="color: white !important;height:50px;width:20%">Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let i of certificates; let count = index">
+                            <td>{{i?.collectedBy}}</td>
+                            <td>{{i?.givenBy?.name}}</td>
+                            <td>{{i?.comments}}</td>
+                            <td>
+                                {{i?.createdAt | date}}
+                            </td>
+                            <td>
+                                <a style="cursor:pointer" (click)="downloadFormat(i?.certificate)">
+                                    <mat-icon aria-hidden="false" matTooltip="View">visibility</mat-icon>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+
+            <div class="d-flex justify-content-center py-2" >
+              <button type="button" class="btn btn-sm btn-danger" *ngIf="admissionData?.status==true"
+              data-toggle="modal" data-target="#exampleModal"
+              >Drop</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- drop confirm modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title m-0" id="exampleModalLabel">Do you want to drop the admission?</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex flex-column">
+          <label>Drop Reason: </label>
+          <textarea rows="3" placeholder="specify drop reason" [formControl]="dropReason" ></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" >Close</button>
+        <button type="button" class="btn btn-danger btn-sm" (click)="drop()" data-dismiss="modal">Drop</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<h1 class="shadow text-center" mat-dialog-title>Add Multiple Employees</h1>
+<div class="text-right my-2">
+    <a class="btn btn-primary btn-sm" [href]="downloadFormat()">
+        Download Format
+    </a>
+</div>
+
+
+<mat-dialog-content>
+  <form [formGroup]="multipleEmpForm">
+    <div class="container">
+      <div class="row">
+        <div class="col ">
+            <mat-label>Upload File</mat-label> &nbsp; &nbsp;
+            <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
+            <input hidden (change)="uploadFile($event)" #fileInput  type="file" id="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+            upload .xlsx file
+            <br>{{fileName}}
+        </div>
+      </div>
+    </div>
+    <mat-dialog-actions align="center">
+      <button mat-raised-button color="primary" (click)="submit()" tabindex="1">
+        Add Sheet
+      </button>
+      <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

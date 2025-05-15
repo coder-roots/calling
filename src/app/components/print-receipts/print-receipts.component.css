@@ -1,0 +1,84 @@
+
+*{
+    box-sizing: border-box;
+}
+
+@media print
+{    
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+}
+
+.container{
+    /* max-width: 80%!important; */
+}
+.numbers{
+    font-size: 25px;
+    font-weight: bold;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    text-align: end;
+    
+}
+
+.address{
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: end;
+
+}
+.address-website{
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-size: 16px;
+    text-align: end;
+}
+.center-line{
+    font-size: 20px;
+    font-family: 'Merriweather', serif;
+}
+.signature{
+    font-size: 20px;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    margin-top:50px;
+}
+
+.sign-img{
+    top:-70px;
+    left:120px;
+}
+.amount{
+    border: 2px black solid;
+    font-size: 30px;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    box-shadow: 10px 10px black;
+  
+}
+
+.bdr{
+    border-bottom: 2px black dotted;
+}
+.iso{
+    font-size: 20px;
+    font-weight: bold;
+    font-family: sans-serif;
+    line-height: 10px;
+}
+.certified{
+    font-weight: bold;
+    font-size: 15px;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+
+}
+
+
+
+.italic{
+    font-style: italic;
+}
+
+
+.font-size-lg{
+    font-size: larger;
+}

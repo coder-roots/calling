@@ -1,0 +1,16 @@
+.space{
+    margin-top: 1rem!important;
+}
+
+.fs-2{
+    font-size: 2rem!important;
+}
+
+.side-menu__icons {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    font-size: 1.2rem;
+    margin-right: 0.8rem; 
+    margin-top: 1rem
+}

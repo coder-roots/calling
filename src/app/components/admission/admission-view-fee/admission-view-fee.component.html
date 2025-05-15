@@ -1,0 +1,301 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <h4 class="page-title">View fee: Admission</h4>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">View Fee</li>
+    </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW-1 -->
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+              <div class="d-flex align-items-center ">
+                <h3 class="card-title">{{admissionData?.studentId.studentName}}'s Fee Detail & Course List</h3>
+                <span *ngIf="admissionData?.status==false" class="text-danger px-2">Dropped</span>
+              </div>
+              <span>
+
+                    <button mat-icon-button [matMenuTriggerFor]="beforeMenu" aria-label="Example icon-button with a menu">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #beforeMenu="matMenu" xPosition="before">
+                        <button mat-menu-item *ngIf="admissionData?.isFeeCalculated"
+                            [routerLink]="['/admin/admission/view',admissionId]">
+                            Admission Detail
+                        </button>
+                        <button mat-menu-item [routerLink]="['/admin/admission/edit',admissionId]" [disabled]="admissionData?.status==false">
+                           Edit
+                        </button>
+                        <button mat-menu-item [routerLink]="['/admin/admission/changeCourse',admissionId]" [disabled]="admissionData?.status==false">
+                           Change Course & Fee
+                        </button>
+                        <button mat-menu-item (click)="printDetail()">Print</button>
+                    </mat-menu>
+                </span>
+            </div>
+            <!-- personal details -->
+            <div class="my-2 px-5">
+                <table>
+                    <tr>
+                        <td width="5%"><mat-icon> email</mat-icon></td>
+                        <td width="45%">
+                            {{admissionData?.studentId.email}}
+                        </td>
+                        <td width="05%"><mat-icon> call</mat-icon></td>
+                        <td width="45%">
+                            {{admissionData?.studentId.personalContact}} <br>
+                            {{admissionData?.studentId.parentsContact}}
+                        </td>
+                    </tr>
+                </table>
+
+
+            </div>
+            <!-- course List -->
+            <div>
+
+
+                <table mat-table [dataSource]="dataSource" class="table card-table table-vcenter mat-elevation-z8">
+                    <!-- AutoId Column -->
+                    <ng-container matColumnDef="index">
+                        <th mat-header-cell *matHeaderCellDef>Sr. No</th>
+                        <td mat-cell *matCellDef="let row; let i = index">{{ i+1 }}</td>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>Course</th>
+                        <td mat-cell *matCellDef="let row">{{ row?.course.name }}</td>
+                    </ng-container>
+
+                    <!-- Course Type Column -->
+                    <ng-container matColumnDef="courseType">
+                        <th mat-header-cell *matHeaderCellDef>Course Type</th>
+                        <td mat-cell *matCellDef="let row">
+                            <span *ngIf="row?.course.courseType == '1'">Single</span>
+                            <span *ngIf="row?.course.courseType == '2'">Combo</span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Fee Column -->
+                    <ng-container matColumnDef="fee">
+                        <th mat-header-cell *matHeaderCellDef>Course Fee</th>
+                        <td mat-cell *matCellDef="let row">{{ row?.fee | currency:"INR" }}</td>
+                    </ng-container>
+
+                    <!-- Minimum Registraion fee Column -->
+                    <ng-container matColumnDef="minimumRegistrationFee">
+                        <th mat-header-cell *matHeaderCellDef>Minimum Registration</th>
+                        <td mat-cell *matCellDef="let row">{{ row?.minimumRegistrationFee | currency:"INR"}}</td>
+                    </ng-container>
+
+                    <!-- Duration Column -->
+                    <ng-container matColumnDef="duration">
+                        <th mat-header-cell *matHeaderCellDef>Duration</th>
+                        <td mat-cell *matCellDef="let row">{{ row?.duration }}</td>
+                    </ng-container>
+                  
+
+
+                    <!-- <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>Action</th>
+                  <td mat-cell *matCellDef="let row">
+                    <a href="javascript:void(0)" [routerLink]="['/admin/course/edit',row?._id]"
+                      ><mat-icon aria-hidden="false">edit_outline</mat-icon></a>
+                  </td>
+                </ng-container> -->
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"  [ngClass]="row?.fee==0 ? 'bg-grey' : ''"></tr>
+
+                    <!-- Row shown when there is no matching data. -->
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell text-center" colspan="12">
+                            <strong>No data</strong>
+                        </td>
+                    </tr>
+                </table>
+
+
+            </div>
+
+            <!-- fee detail -->
+            <div class="mt-4 p-3">
+                <!-- total -->
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important;height:50px;" colspan="2">
+                                Fee Detail
+                            </th>
+                            <th class="bg-primary" style="color: white !important;height:50px; text-align:right"
+                                colspan="2">
+                                <button mat-raised-button color="secondary" matBadge="8" matBadgePosition="before"
+                                    matBadgeColor="accent">
+                                    Admission Date : {{admissionData?.admissionDate | date}}
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td width="25%">Total Fee Applicable</td>
+                            <td width="25%">{{feeData?.totalFeesApplicable | currency :"INR"}}</td>
+                            <td width="25%">Discount</td>
+                            <td width="25%">{{feeData?.discount | currency :"INR"}}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Fee to be paid</td>
+                            <td><b>{{feeData?.totalFeeToBePaid | currency :"INR"}}</b></td>
+                            <td>Registration Fee</td>
+                            <td><b>{{feeData?.registrationFeePayable | currency :"INR"}}</b></td>
+                        </tr>
+                        <tr>
+                            <td>Registration Paid</td>
+                            <td>{{ getRegistrationPaidAmount() | currency :"INR"}}</td>
+
+                            <td>Registration Fee pending</td>
+                            <td>
+                                <ng-container *ngIf="feeData?.isRegistrationFeePending">{{ feeData?.registrationFeePending | currency :"INR"}}</ng-container>
+                                <ng-container *ngIf="!feeData?.isRegistrationFeePending">Nill</ng-container>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Total Paid</td>
+                            <td>{{feeData?.totalFeePaid | currency :"INR"}}</td>
+                            <td>Balance</td>
+                            <td><b>{{feeData?.totalBalance | currency :"INR"}}</b></td>
+                        </tr>
+                        <tr>
+                            <td>Created At</td>
+                            <td>{{feeData?.createdAt | date}}</td>
+                            <td>Pending Registration Paid At</td>
+                            <td>{{feeData?.pendingRegistraionPaidAt | date}}</td>
+                        </tr>
+                        <tr *ngIf="feeData?.extra!=0">
+                            <td>Extra Amount Collected</td>
+                            <td>{{feeData?.extra | currency:"INR"}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- installments -->
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important;height:50px;" colspan="7">
+                                <div class="d-flex justify-content-between">
+                                    <span>Installments</span>
+                                    <button mat-raised-button color="secondary" matBadge="8" matBadgePosition="before"
+                                        matBadgeColor="accent">
+                                        Course Start Date : {{feeData?.courseStartDate | date}}
+                                    </button>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Installment</th>
+                            <th>Amount Payable</th>
+                            <th>Paid Amount</th>
+                            <th>Installment Balance</th>
+                            <th>Installment Month</th>
+
+                        </tr>
+                        <tr *ngFor="let i of feeData?.installments; let index= index">
+                            <th>{{i?.installmentNo}}</th>
+                            <td>{{i?.amountToBePaid | currency :"INR"}}</td>
+                            <td>
+                                <span *ngIf="i?.paidAmount==0">{{i?.paidAmount | currency :"INR"}}</span>
+                                <span *ngIf="i?.paidAmount!=0 && i?.paidAmount < i?.amountToBePaid ">{{ getPaidAmount(i) | currency :"INR"}}</span>
+                                <span *ngIf="i?.paidAmount!=0 && i?.paidAmount >= i?.amountToBePaid ">{{i?.paidAmount | currency :"INR"}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="i?.paidAmount==0 && i?.isBalancePending ">{{i?.amountToBePaid | currency :"INR"}}</span>
+                                <span *ngIf="i?.paidAmount==0 && !i?.isBalancePending ">{{i?.balance | currency :"INR"}}</span>
+                                <span *ngIf="i?.paidAmount!=0">{{i?.balance | currency :"INR"}}</span>
+                            </td>
+                          <td>{{monthArray[i?.installmentMonth-1]?.monthName??'Not Mention'}}</td>
+                            <!-- <td>
+                                <mat-icon *ngIf="i?.paidAmount!=0">print</mat-icon>
+                            </td> -->
+                        </tr>
+
+                    </tbody>
+                </table>
+                <!-- receipts -->
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary" style="color: white !important;height:50px;" colspan="12">
+                                <div class="d-flex justify-content-between">
+                                    <span>Receipts</span>
+                                    <span class="btn btn-sm btn-warning" (click)="generateExcel()">
+                                      🡇 Excel
+                                    </span>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Slip ID/Slip Type</th>
+                            <th>Slip Heads</th>
+                            <th>Paid Amount</th>
+                            <th>Paid At</th>
+                            <th>Collected By</th>
+                            <th>Payment Method</th>
+                            <th>Course Opted</th>
+                            <th>Total Fine</th>
+                            <th>Fine Paid</th>
+                            <th>Reason</th>
+                            <th>Remarks</th>
+                            <th>Receipt</th>
+                        </tr>
+                        <tr *ngFor="let i of receiptList; let index= index">
+                            <td>
+                                <span>{{i?.feeReceiptAutoId}} {{i?.receiptType==1?'( '+i?.manualReceiptNumber+' )':''}} /</span>
+                                <span *ngIf="i?.isRegistrationSlip">Registration</span>
+                                <span *ngIf="!i?.isRegistrationSlip">Installment {{i?.installmentNumber}}</span>
+                            </td>
+                            <td>
+                              <ng-container *ngFor="let itr of i?.receiptHead">
+                              <button class="btn btn-primary btn-sm mx-1">{{itr}}</button>
+                              </ng-container>
+                            </td>
+                            <td>{{i?.amountPaid | currency :"INR"}}</td>
+                            <td>
+                                {{i?.collectedOn | date}} <br>
+                                {{i?.collectedOn | date: 'shortTime'}}
+                            </td>
+                            <td>{{i?.collectedBy?.name | titlecase}}</td>
+                            <td>{{i?.paymentMethod}}</td>
+                            <td>
+                              <ng-container *ngIf="(i?.courseTaken==null || i?.courseTaken==undefined)">
+                                <ul>
+                                    <li *ngFor="let itr of i?.admissionId?.technologies">{{itr?.course?.name}}</li>
+                                </ul>
+                                <!-- <p></p> -->
+                              </ng-container>
+                              <span *ngIf="!!i.courseTaken">{{i?.courseTaken}}</span>
+                            </td>
+                            <td>{{i?.totalFine}}</td>
+                            <td>{{i?.finePaid}}</td>
+                            <td>{{i?.reason}}</td>
+                            <td>{{i?.remarks}}</td>
+                            <td>
+                                <mat-icon  *appHasRole="['PRINT-RECEIPT-MANAGE']" (click)="goToReceipt(i)">print</mat-icon>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>

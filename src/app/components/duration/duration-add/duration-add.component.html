@@ -1,0 +1,35 @@
+<h1 class="shadow text-center" mat-dialog-title>{{ type }} Duration</h1>
+
+<!-- <mat-dialog-content> -->
+<form [formGroup]="durationForm">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <mat-form-field appearance="legacy">
+          <mat-label>Duration</mat-label>
+          <input matInput placeholder="Duration" formControlName="duration" />
+          <mat-error *ngIf="durationForm.get('duration')?.hasError('required')">
+            Please enter duration.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col">
+        <mat-form-field appearance="legacy">
+          <mat-label>Installments</mat-label>
+          <input matInput placeholder="Installments" formControlName="installments" />
+          <mat-error *ngIf="durationForm.get('installments')?.hasError('required')">
+            Please enter installments.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <mat-dialog-actions align="center">
+    <button mat-raised-button color="primary" (click)="submit()" tabindex="1">
+      {{ type }} Duration
+    </button>
+    <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+  </mat-dialog-actions>
+</form>
+<!-- </mat-dialog-content> -->

@@ -1,0 +1,182 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <h4 class="page-title">{{type}} Certificate Sheet</h4>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/admin/certificates']">Certificate Sheets</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{type}} Certificate Sheet
+        </li>
+    </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW-1 -->
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div>
+                    <h3 class="card-title">{{type}} Certificate Sheet</h3>
+                </div>
+
+                <div class="row">
+
+                    <a class="btn btn-primary btn-sm mr-2" [href]="downloadFormat()">
+                        Download Format
+                    </a>
+                    <button class="btn btn-primary btn-sm mr-2" [routerLink]="['/admin/certificates']">
+                        Certificates List
+                    </button>
+                </div>
+            </div>
+            <div class="mt-4 p-3">
+                <form [formGroup]="certificateSheetForm">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Title</mat-label>
+                                <input type="text" matInput placeholder="Title" formControlName="title" />
+                                <mat-error *ngIf="certificateSheetForm.get('title')?.hasError('required') ">
+                                    Please enter valid title.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Comments</mat-label>
+                                <input type="text" matInput placeholder="Semester" formControlName="comments" />
+                                <mat-error *ngIf="certificateSheetForm.get('comments')?.hasError('required')">
+                                    Please enter comments.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-4">
+                            <mat-label>Upload File</mat-label> &nbsp; &nbsp;
+                            <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
+                            <input hidden (change)="uploadFile($event)" #fileInput type="file" id="file"
+                                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                [disabled]="type=='View'">
+                            upload .xlsx file
+                            <br>{{fileName}}
+                        </div>
+                        <div class="col">
+                            <mat-radio-group aria-label="Receipt Type" formControlName="company" class="d-flex pt-4">
+                                <mat-radio-button id="receipt-computerized" [value]="0">O7
+                                    Services</mat-radio-button>&nbsp;&nbsp;
+                                <mat-radio-button id="receipt-manual" [value]="1">O7 Solutions</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary d-block m-auto" (click)="submit()" tabindex="1"
+                        [disabled]="certificateSheetForm.invalid" *ngIf="type=='Add'">
+                        Add Sheet
+                    </button>
+                    <button class="btn btn-primary d-block m-auto" (click)="submit()" tabindex="1"
+                        [disabled]="certificateSheetForm.invalid" *ngIf="type=='View'">
+                        Update Sheet
+                    </button>
+                </form>
+            </div>
+            <div *ngIf="showTable" class="mx-5">
+                <div class="d-flex justify-content-between align-items-center p-4  ">
+                    <div>
+                        <h4 class="mb-1 text-dark">{{sheetData?.title}}(<span
+                                class="text-muted">{{sheetData?.comments}}</span>)</h4>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 text-primary font-weight-bold">Total: {{certificateSheetData?.userList?.length}}
+                        </h4>
+                    </div>
+                </div>
+
+
+                <table mat-table [dataSource]="dataSource" class="table card-table table-vcenter mat-elevation-z8">
+
+                    <!-- AutoId Column -->
+                    <ng-container matColumnDef="srNo">
+                        <th mat-header-cell *matHeaderCellDef>#</th>
+                        <td mat-cell *matCellDef="let row; let i = index">{{ i+1 }}</td>
+                    </ng-container>
+                    <!-- AutoId Column -->
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>Student Name</th>
+                        <td mat-cell *matCellDef="let row; let i = index" style="width:150px">{{ row?.name }}</td>
+                    </ng-container>
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="email">
+                        <th mat-header-cell *matHeaderCellDef>Email</th>
+                        <td mat-cell *matCellDef="let row" style="width:150px">{{ row?.email }}</td>
+                    </ng-container>
+
+                    <!-- contact Column -->
+                    <ng-container matColumnDef="coursename">
+                        <th mat-header-cell *matHeaderCellDef>Course name</th>
+                        <td mat-cell *matCellDef="let row" style="width:150px">
+                            {{row?.coursename}} <br />
+                        </td>
+                    </ng-container>
+
+                    <!--caller name Column -->
+                    <ng-container matColumnDef="refNo">
+                        <th mat-header-cell *matHeaderCellDef>Ref No</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{row?.refNo}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="course">
+                        <th mat-header-cell *matHeaderCellDef>Course</th>
+                        <td mat-cell *matCellDef="let row" style="width:150px">
+                            {{row?.start | date}} - <br>
+                            {{row?.end | date}}
+                        </td>
+                    </ng-container>
+
+                    <!-- <ng-container matColumnDef="detail">
+                        <th mat-header-cell *matHeaderCellDef>Detail</th>
+                        <td mat-cell *matCellDef="let row" width="200px">{{ row?.detail}}</td>
+                    </ng-container> -->
+
+                    <!-- CreatedAt Column -->
+
+
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>Certificate
+                            <button class="btn  btn-sm mt-1" (click)="downloadAll()">
+                                <mat-icon aria-hidden="false" matTooltip="Download All">download</mat-icon>
+                            </button>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index">
+
+                            <a (click)="openCertificate(row?.certificate)" style="cursor:pointer" class="mx-1">
+                                <mat-icon aria-hidden="false" matTooltip="View">visibility</mat-icon>
+                            </a>
+
+                            <a [href]="download(row?.certificate)" target="_blank" download="File.pdf"
+                                style="cursor:pointer" class="mx-1">
+                                <mat-icon matTooltip="Download">cloud_download</mat-icon>
+                            </a>
+
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+                    <!-- Row shown when there is no matching data. -->
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell text-center" colspan="12">
+                            <strong>No data</strong>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!-- <mat-paginator #paginator [length]="total" [pageSize]="10"
+                (page)="getAllEnquiry($event)"></mat-paginator> -->
+        </div>
+    </div>
+</div>

@@ -1,0 +1,109 @@
+<h1 class="shadow text-center" mat-dialog-title>{{ type }} Client</h1>
+
+<mat-dialog-content>
+  <form [formGroup]="clientForm">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="legacy">
+            <mat-label>Client</mat-label>
+            <input matInput placeholder="Client" formControlName="name" />
+            <mat-error *ngIf="clientForm.get('name')?.hasError('required')">
+              Please enter client name.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="legacy">
+            <mat-label>Administrator</mat-label>
+            <input matInput
+              placeholder="Administrator" formControlName="administrator" />
+            <mat-error *ngIf="clientForm.get('administrator')?.hasError('required')">
+              Please enter Administrator
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="legacy">
+            <mat-label>Email</mat-label>
+            <input matInput
+              placeholder="Email" formControlName="email" />
+            <mat-error *ngIf="clientForm.get('email')?.hasError('required')">
+              Please enter Email
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="legacy">
+            <mat-label>Phone</mat-label>
+            <input matInput
+              placeholder="Phone" formControlName="phone" />
+            <mat-error *ngIf="clientForm.get('phone')?.hasError('required')">
+              Please enter Phone
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="legacy">
+            <mat-label>Location</mat-label>
+            <input matInput
+              placeholder="Location" formControlName="location" />
+            <mat-error *ngIf="clientForm.get('location')?.hasError('required')">
+              Please enter Location
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="legacy">
+            <mat-label>Address</mat-label>
+            <input matInput
+              placeholder="Address" formControlName="address" />
+            <mat-error *ngIf="clientForm.get('address')?.hasError('required')">
+              Please enter Address
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="legacy">
+            <mat-label>GST No</mat-label>
+            <input matInput
+              placeholder="GST No" formControlName="gstNo" />
+            <mat-error *ngIf="clientForm.get('gstNo')?.hasError('required')">
+              Please enter GST No
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="legacy">
+            <mat-label>Company Name</mat-label>
+            <input matInput
+              placeholder="Company Name" formControlName="companyName"/>
+            <mat-error *ngIf="clientForm.get('companyName')?.hasError('required')">
+              Please enter Company Name
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+            <mat-form-field appearance="legacy">
+                <mat-label>Date of Birth</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="dob">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <mat-dialog-actions align="center">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="submit()"
+        tabindex="1"
+      >
+        {{ type }} Client
+      </button>
+      <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

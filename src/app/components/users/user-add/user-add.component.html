@@ -1,0 +1,123 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+  <h4 class="page-title">{{ type }} Users</h4>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ type }} Users</li>
+  </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW-1 -->
+<div class="row">
+  <div class="col-md-12 col-lg-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <div>
+          <h3 class="card-title">{{ type }} Users</h3>
+        </div>
+        <div class="row">
+          <button class="btn btn-primary btn-sm mr-2" [routerLink]="['/admin/users']">
+            Users List
+          </button>
+          <button class="btn btn-primary btn-sm" *ngIf="type == 'Update'" (click)="openChangeDialog()">
+            Change Password
+          </button>
+        </div>
+      </div>
+      <div>
+        <div class="mt-4 p-3">
+          <form [formGroup]="userForm">
+            <div class="row">
+              <div class="col-md-3">
+                <label for="">User Type</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <ng-select formControlName="employeeId" (change)="selectEmployee($event)">
+                  <ng-option value="">Choose Employee</ng-option>
+                  <ng-option *ngFor="let i of employeeList" [value]="i._id">
+                    {{i?.name}} {{i?.email}}
+                  </ng-option>
+                </ng-select>
+              </div>
+
+              <div class="col-md-6 mt-3">
+                <mat-form-field appearance="legacy">
+                  <mat-label>Name</mat-label>
+                  <input matInput placeholder="Name" formControlName="name" />
+                  <mat-error *ngIf="userForm.get('name')?.hasError('required')">
+                    Please enter name.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6">
+                <mat-form-field appearance="legacy">
+                  <mat-label>Email</mat-label>
+                  <input type="email" matInput placeholder="Email" formControlName="email" />
+                  <mat-error *ngIf="
+                      userForm.get('email')?.hasError('required') ||
+                      userForm.get('email')?.hasError('email')
+                    ">
+                    Please enter a valid email.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6" *ngIf="type == 'Add'">
+                <mat-form-field appearance="legacy">
+                  <mat-label>Password</mat-label>
+                  <input type="password" matInput placeholder="Password" formControlName="password" />
+                  <mat-error *ngIf="userForm.get('password')?.hasError('required')">
+                    Please enter a password.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6">
+                <mat-form-field appearance="legacy">
+                  <mat-label>Contact Number</mat-label>
+                  <input matInput placeholder="Phone" formControlName="phone" />
+                  <mat-error *ngIf="userForm.get('phone')?.hasError('required')">
+                    Please enter a phone.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6 mt-3">
+                <mat-form-field appearance="legacy">
+                  <mat-label>Role</mat-label>
+                  <mat-select formControlName="role">
+                    <mat-option *ngFor="let role of roleList" [value]="role?._id">
+                      {{ role?.name }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6 mt-3">
+                <mat-form-field>
+                  <mat-label>Assign Companies</mat-label>
+                  <mat-select  multiple formControlName="assignedCompanies">
+
+                    <mat-option *ngFor="let company of companies" [value]="company">
+                      {{ company }}
+                    </mat-option>
+
+
+
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <button (click)="submit()" class="mt-4 btn btn-primary d-block m-auto"
+              [disabled]="userForm.invalid || imageError">
+              {{ type }} User
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+.mat-column-title {
+    flex: none;
+    width: 200px;
+}
+.mat-column-description {
+    flex: none;
+    width: 300px;   
+}
+
+.mat-form-field{
+    width: 100%!important;
+}
+.modal{
+    overflow-y: scroll!important;
+    background: rgba(84, 84, 84, 0.3)!important;
+  }

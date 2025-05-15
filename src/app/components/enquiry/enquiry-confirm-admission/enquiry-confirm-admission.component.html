@@ -1,0 +1,76 @@
+<h1 class="shadow text-center" mat-dialog-title>Registration Fee Receipt</h1>
+
+<!-- <mat-dialog-content> -->
+    <form [formGroup]="confirmAdmissionForm">
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col">
+                    <mat-form-field appearance="legacy">
+                        <mat-label>Amount Payable for Registraion</mat-label>
+                        <input matInput placeholder="Amount Paid" [value]="amountPaid" readonly />
+                    </mat-form-field>
+                </div>
+
+                <div class="col-6">
+                    <mat-form-field appearance="legacy">
+                        <mat-label>Payment Method</mat-label>
+                        <mat-select formControlName="paymentMethod">
+                            <mat-option value="Cash"> Cash </mat-option>
+                            <mat-option value="Online"> Online </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-6">
+                    <!-- <mat-form-field appearance="legacy">
+                        <mat-label></mat-label> -->
+                        <ng-select formControlName="collectedBy" class="w-75" placeholder="Collected By">
+                            <ng-option selected disabled value="">Choose</ng-option>
+                            <ng-option *ngFor="let i of employeeList" [value]="i._id">
+                                {{i?.name}} - {{i?.email}}
+                            </ng-option>
+                        </ng-select>
+                    <!-- </mat-form-field> -->
+                </div>
+                <div class="col-6 mt-3">
+                    <mat-form-field appearance="legacy">
+                        <mat-label>Remarks</mat-label>
+                        <input matInput placeholder="Remarks" formControlName="remarks" />
+                    </mat-form-field>
+                </div>
+                <div class="col-6">
+                    <mat-form-field appearance="legacy">
+                        <mat-label>Collected On</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="collectedOn">
+                        <mat-hint>MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-6 d-flex flex-column">
+                  <mat-label class="my-2">Receipt Type</mat-label>
+                  <mat-radio-group aria-label="Receipt Type" formControlName="receiptType">
+                    <mat-radio-button id="receipt-computerized" [value]="0">Computerized</mat-radio-button>&nbsp;&nbsp;
+                    <mat-radio-button id="receipt-manual" [value]="1">Manual</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+
+                <div class="col-6 d-flex flex-column" *ngIf="this.confirmAdmissionForm.value.receiptType==1">
+                  <mat-label>Receipt Reference No.</mat-label>
+                  <mat-form-field appearance="legacy">
+                    <input matInput placeholder="Manual Receipt Number" formControlName="manualReceiptNumber" />
+                  </mat-form-field>
+                </div>
+
+            </div>
+        </div>
+        <mat-dialog-actions align="center">
+            <button mat-raised-button color="primary" (click)="submit()" tabindex="1">
+                Confirm Admission
+            </button>
+            <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+        </mat-dialog-actions>
+    </form>
+<!-- </mat-dialog-content> -->

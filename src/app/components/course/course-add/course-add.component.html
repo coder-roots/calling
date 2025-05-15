@@ -1,0 +1,113 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <h4 class="page-title">{{ type }} Client</h4>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/admin/courses']">Course</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ type }} Course
+        </li>
+    </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW-1 -->
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div>
+                    <h3 class="card-title">{{ type }} Course</h3>
+                </div>
+
+                <div class="row">
+                    <button class="btn btn-primary btn-sm mr-2" [routerLink]="['/admin/courses']">
+                        Course List
+                    </button>
+                </div>
+            </div>
+            <div class="mt-4 p-3">
+                <form [formGroup]="courseForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Course Name</mat-label>
+                                <input matInput placeholder="Course name" formControlName="name" />
+                                <mat-error *ngIf="courseForm.get('name')?.hasError('required')">
+                                    Please enter course name.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Choose Duration</mat-label>
+                                <mat-select formControlName="duration">
+                                  <mat-option *ngFor="let i of durationList" [value]="i._id">
+                                    {{i?.duration}} - {{i?.installments}} Installments
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Fee</mat-label>
+                                <input type="number" matInput placeholder="Fee" formControlName="fee" />
+                                <mat-error *ngIf="
+                      courseForm.get('fee')?.hasError('required') ||
+                      courseForm.get('fee')?.hasError('fee')
+                    ">
+                                    Please enter valid fee.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Minimum Registration Fee</mat-label>
+                                <input type="number" matInput placeholder="Minimum Registration Fee"
+                                    formControlName="minimumRegistrationFee" />
+                                <mat-error *ngIf="courseForm.get('minimumRegistrationFee')?.hasError('required')">
+                                    Please enter a minimum Registration Fee.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="d-flex col-md-6 align-items-center">
+                            <mat-label>Choose Course Type</mat-label> &nbsp; &nbsp;
+                            <mat-radio-group aria-label="Select Course Type" formControlName="courseType" aria-labelledby="example-radio-group-label"
+                            class="example-radio-group">
+                                <mat-radio-button value="1">Single</mat-radio-button>
+                                <mat-radio-button value="2">Combo</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+                            <!-- <mat-form-field class="example-full-width">
+                                <mat-label>Upload Picture</mat-label>
+                                <input type="file" matInput maxlength="6" (change)="uploadImage($event)" />
+                            </mat-form-field> -->
+                            <mat-label>Upload Course Picture</mat-label> &nbsp; &nbsp;
+                            <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
+                            <input hidden (change)="uploadImage($event)" #fileInput  type="file" id="file">
+                            {{fileName}}
+                        </div>
+                        <div class="col-md-12">
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Detail</mat-label>
+                                <textarea matInput formControlName="detail"></textarea>
+                                <!-- <mat-error *ngIf="courseForm.get('detail')?.hasError('required')">
+                                    Please enter detail.
+                                </mat-error> -->
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary d-block m-auto" (click)="submit()" tabindex="1"
+                        [disabled]="courseForm.invalid">
+                        {{ type }} Course
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

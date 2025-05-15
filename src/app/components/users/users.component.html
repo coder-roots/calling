@@ -1,0 +1,193 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+  <h4 class="page-title">Users</h4>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Users</li>
+  </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW-1 -->
+<div class="row">
+  <div class="col-md-12 col-lg-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <h3 class="card-title">Users List</h3>
+        <button
+          class="btn btn-primary btn-sm"
+          [routerLink]="['/admin/users/add']"
+        >
+          + Add Users
+        </button>
+      </div>
+      <div>
+        <!-- <div class="input-group p-5">
+          <input
+            type="search"
+            class="form-control rounded bg-white"
+            placeholder="Search"
+            aria-label="Search"
+            aria-describedby="search-addon"
+            (keyup)="getUser($event)"
+            [(ngModel)]="search1"
+          />
+          <button
+            type="button"
+            class="btn btn-primary text-white"
+            (click)="getAllUsers(null)"
+          >
+            Search
+          </button>
+        </div> -->
+
+        <table
+          mat-table
+          [dataSource]="dataSourceUser"
+          class="table card-table table-vcenter mat-elevation-z8"
+        >
+          <!-- AutoId Column -->
+          <ng-container matColumnDef="autoId">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let row">#{{ row.userAutoId }}</td>
+          </ng-container>
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+          </ng-container>
+
+          <!-- Email Column -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let row">{{ row.email }}</td>
+          </ng-container>
+          <ng-container matColumnDef="companies">
+            <th mat-header-cell *matHeaderCellDef>Companies</th>
+            <td mat-cell *matCellDef="let row">{{ row.assignedCompanies }}</td>
+          </ng-container>
+
+
+
+
+          <!-- Phone Column -->
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef>Phone</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.phone }}
+            </td>
+          </ng-container>
+          <!-- Role Column -->
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef>Role</th>
+            <td mat-cell *matCellDef="let row">
+              <span [ngClass]="{ 'badge bg-primary text-white': row?.role }">{{
+                row?.role ? row.role?.name : "-"
+              }}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Blocked</th>
+            <td mat-cell *matCellDef="let row">
+              <mat-slide-toggle
+                [checked]="row.isBlocked"
+                (change)="changeUserStatus($event, row._id, 1)"
+              >
+              </mat-slide-toggle>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let row">
+              <a
+                *ngIf="userType == 2"
+                title="View"
+                data-toggle="modal"
+                data-target="#detailModal"
+                (click)="sendUserData(row)"
+                href="javascript:void(0)"
+              >
+                <mat-icon aria-hidden="false">visibility_outline</mat-icon>
+              </a>
+              <a [routerLink]="['/admin/users/edit', row._id]"
+                ><mat-icon aria-hidden="false">edit_outline</mat-icon></a
+              >
+              <a *appHasRole="['USER-DELETE']"
+                title="Delete"
+                (click)="openDeleteDialog(row._id, 1)"
+                href="javascript:void(0)"
+              >
+                <mat-icon aria-hidden="false">delete_outline</mat-icon>
+              </a>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsUser"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsUser"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell text-center" colspan="12">
+              <strong>No data</strong>
+            </td>
+          </tr>
+        </table>
+
+        <mat-paginator
+          #paginator1
+          [length]="totalUser"
+          [pageSize]="10"
+          (page)="getAllUsers($event)"
+        ></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="detailModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="detailModalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLongTitle">User Details</h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+          <tr>
+            <th>Name</th>
+            <td>{{ singleUserData?.name }}</td>
+          </tr>
+          <tr>
+            <th>Contact</th>
+            <td>
+              {{ singleUserData?.phone }}
+            </td>
+          </tr>
+          <tr>
+            <th>Email</th>
+            <td>{{ singleUserData?.email }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>

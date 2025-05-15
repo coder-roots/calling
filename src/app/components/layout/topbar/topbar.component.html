@@ -1,0 +1,72 @@
+<!-- HEADER -->
+<div class="header app-header">
+  <div class="container-fluid">
+    <div class="d-flex">
+      <a class="header-brand" [routerLink]="['/admin/home']">
+        
+        <!-- <img src="assets/images/brand/o7.jpg" class="header-brand-img mobile-view-logo" alt="Solic logo"> -->
+        <h1 class="pt-2 p-0 m-0 text-primary"><img src="../../../../assets/images/brand/o7.jpg" class="header-brand-img desktop-logo" alt="o7 logo"> Services</h1> </a
+      ><!-- LOGO -->
+      <!-- <a *ngIf = "showToggle" aria-label="Hide Sidebar" class="app-sidebar__toggle" data-toggle="sidebar" href="javascript: void(0)"></a> -->
+      <a
+        aria-label="Hide Sidebar"
+        class="app-sidebar__toggle"
+        data-toggle="sidebar"
+        href="#"
+      ></a>
+
+      <div
+        class="d-flex order-lg-2 ml-auto header-right-icons header-search-icon"
+      >
+        <a
+          href="#"
+          data-toggle="search"
+          class="nav-link nav-link-lg d-md-none navsearch"
+          ><i class="fa fa-search"></i
+        ></a>
+          <div class="py-3">
+            <button class="btn btn-primary btn-sm mr-3" data-toggle="tooltip" data-placement="bottom" title="Press Sync Button After adding College, Course, College Courses ,Duration, TimeSlot, Labs and Employees" (click)="sync()">Sync</button>
+          </div>
+        
+        <div class="dropdown d-md-flex header-settings">
+          <a href="#" class="nav-link" data-toggle="dropdown">
+            <span
+              ><img
+                src="assets/images/users/male/user_profile.svg"
+                alt="profile-user"
+                class="avatar brround cover-image mb-0 ml-0"
+            /></span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+            <div class="drop-heading text-center border-bottom pb-3">
+              <h5 class="text-dark mb-1">{{ userData?.data?.name }}</h5>
+              <small class="text-muted">{{ userData?.data?.email }}</small>
+            </div>
+            <!-- <a class="dropdown-item" href="profile.html"><i class="mdi mdi-account-outline mr-2"></i> <span>My profile</span></a>
+                        <a class="dropdown-item" href="#"><i class="mdi mdi-settings mr-2"></i> <span>Settings</span></a>
+                        <a class="dropdown-item" href="#"><i class="fe fe-calendar mr-2"></i> <span>Activity</span></a>
+                        <a class="dropdown-item" href="#"><i class="mdi mdi-compass-outline mr-2"></i> <span>Support</span></a> -->
+            <a
+              class="dropdown-item"
+              href="javascript:void(0)"
+              (click)="openChangeDialog()"
+              ><i
+              class="side-menu__icon fe fe-lock"></i>
+              <span>Change Password</span></a
+            >
+            <a
+              class="dropdown-item"
+              href="javascript:void(0)"
+              (click)="logout()"
+              ><i
+              class="side-menu__icon fe fe-log-out"></i>
+              <span>Logout</span></a
+            >
+          </div>
+        </div>
+        <!-- SIDE-MENU -->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- HEADER END -->

@@ -1,0 +1,148 @@
+<!-- Sidebar menu-->
+<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+<aside class="app-sidebar left-menu2">
+  <div class="">
+    <div class="dropdown user-pro-body text-center">
+      <!-- <div class="user-pic">
+        <img src="assets/images/users/male/32.jpg" alt="user-img" class="avatar avatar-lg brround">
+      </div> -->
+      <!-- <div class="user-info">
+        <h2>{{ userData?.data?.name }}</h2>
+        <span>{{ userData?.data?.email }}</span>
+      </div> -->
+      <!-- <a  aria-label="Hide Sidebar" class="app-sidebar__toggle" data-toggle="sidebar" href="javascript: void(0)"></a> -->
+      <!-- <li class="nav-item"> -->
+        <select
+          class="form-control"
+          [(ngModel)]="sessionYear"
+          (change)="setSessionYear($event)"
+        >
+          <option [value]="session._id" *ngFor="let session of sessionYearList">
+            Session - {{ session.name }}
+          </option>
+        </select>
+      <!-- </li> -->
+
+    </div>
+  </div>
+  <ul class="side-menu">
+    <!-- <li class="border-0">
+            <h3>MAIN</h3>
+        <li> -->
+    <li>
+      <a class="side-menu__item" routerLinkActive="" [routerLink]="['/admin/home']"><i
+          class="side-menu__icon fe fe-home"></i><span class="side-menu__label">Dashboard</span></a>
+    </li>
+
+
+    <li *appHasRole="['COURSE-MANAGE']">
+    <!-- <li> -->
+      <a class="side-menu__item" routerLinkActive="" [routerLink]="['/admin/courses']"><i
+          class="side-menu__icon fe fe-book-open"></i><span class="side-menu__label">Course</span></a>
+    </li>
+
+    <li *appHasRole="['ENQUIRY-MANAGE']">
+    <!-- <li> -->
+      <a class="side-menu__item" routerLinkActive="" [routerLink]="['/admin/enquiries']"><i
+          class="side-menu__icon fe fe-help-circle"></i><span class="side-menu__label">Enquiry</span></a>
+    </li>
+
+    <li *appHasRole="['CALL-MANAGE']">
+    <!-- <li> -->
+      <a class="side-menu__item" routerLinkActive="" [routerLink]="['/admin/calls']"><i
+          class="side-menu__icon fe fe-phone-call"></i><span class="side-menu__label">Calling</span></a>
+    </li>
+
+    <!-- <li *appHasRole="['ADMISSION-MANAGE']"> -->
+    <!-- <li>
+      <a class="side-menu__item" routerLinkActive="" [routerLink]="['/admin/admissions']"><i
+          class="side-menu__icon fe fe-user-check"></i><span class="side-menu__label">Admission</span></a>
+    </li> -->
+   
+    
+
+
+
+    <li *appHasRole="['STUDENT-MANAGE']">
+    <!-- <li> -->
+      <a class="side-menu__item" routerLinkActive="" [routerLink]="['/admin/students']"><i
+          class="side-menu__icon fe fe-user"></i><span class="side-menu__label">Student</span></a>
+    </li>
+    <li *appHasRole="['STORE-ITEMS-MANAGE']">
+    <!-- <li> -->
+      <a class="side-menu__item" routerLinkActive=""
+        [routerLink]="['/admin/storeItems']"><mat-icon>store</mat-icon><span class="side-menu__label">Store
+          Items</span></a>
+    </li>
+
+
+
+    <li
+      *appHasRole="['USER-MANAGE', 'ROLES-PERMISSION-MANAGE', 'CLIENTS-MANAGE', 'EMPLOYEE-MANAGE']"
+      class="slide"
+    >
+    <!-- <li> -->
+      <a class="side-menu__item slide-show" routerLinkActive=""><i class="side-menu__icon fe fe-users"></i><span
+          class="side-menu__label">Users</span><i class="angle fa fa-angle-right"></i></a>
+      <ul class="slide-menu">
+        <li *appHasRole="['ROLES-PERMISSION-MANAGE']">
+        <!-- <li> -->
+          <a class="slide-item" [routerLink]="['/admin/roles']">Roles & Permissions</a>
+        </li>
+        <li *appHasRole="['USER-MANAGE']">
+        <!-- <li> -->
+          <a class="slide-item" [routerLink]="['/admin/users']">Users</a>
+        </li>
+        <li *appHasRole="['CLIENTS-MANAGE']">
+        <!-- <li> -->
+          <a class="slide-item" [routerLink]="['/admin/clients']">Clients</a>
+        </li>
+        <li *appHasRole="['EMPLOYEE-MANAGE']">
+        <!-- <li> -->
+          <a class="side-menu__item" [routerLink]="['/admin/employees']">
+            <span class="side-menu__label">Employee</span></a>
+        </li>
+      </ul>
+    </li>
+
+
+
+
+    <li
+      *appHasRole="['DURATION-MANAGE', 'COLLEGE-MANAGE', 'TIMESLOT-MANAGE', 'LAB-MANAGE']"
+      class="slide"
+    >
+    <!-- <li> -->
+      <a class="side-menu__item slide-show"><i class=""></i><span class="side-menu__label">Others</span><i
+          class="angle fa fa-angle-right"></i></a>
+      <ul class="slide-menu">
+
+        <li *appHasRole="['DURATION-MANAGE']">
+        <!-- <li> -->
+          <a class="slide-item" [routerLink]="['/admin/durations']"><span class="side-menu__label">Duration</span></a>
+        </li>
+        <li *appHasRole="['COLLEGE-MANAGE']">
+        <!-- <li> -->
+          <a class="slide-item" [routerLink]="['/admin/colleges']"><span class="side-menu__label">College</span></a>
+        </li>
+        <li *appHasRole="['COLLEGE-COURSE-MANAGE']">
+        <!-- <li> -->
+          <a class="slide-item" [routerLink]="['/admin/collegeCourses']"><span
+              class="side-menu__label">College Courses</span></a>
+        </li>
+        <li *appHasRole="['TIMESLOT-MANAGE']">
+        <!-- <li> -->
+          <a class="slide-item" [routerLink]="['/admin/timeSlots']"><span class="side-menu__label">Time-Slot</span></a>
+        </li>
+        <li *appHasRole="['LAB-MANAGE']">
+        <!-- <li> -->
+          <a class="slide-item" [routerLink]="['/admin/labs']"><span class="side-menu__label">Lab</span></a>
+        </li>
+        <li *appHasRole="['SESSIONYEAR-MANAGE']">
+        <!-- <li> -->
+          <a class="slide-item" [routerLink]="['/admin/sessionYears']"><span class="side-menu__label">Session Year</span></a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</aside>

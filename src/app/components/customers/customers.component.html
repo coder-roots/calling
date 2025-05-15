@@ -1,0 +1,233 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+  <h4 class="page-title">Clients</h4>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Clients</li>
+  </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW-1 -->
+<div class="row">   
+  <div class="col-md-12 col-lg-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <h3 class="card-title">Clients List</h3>
+        <button
+          class="btn btn-primary btn-sm"
+          [routerLink]="['/admin/client/add']"
+        >
+          + Add Client
+        </button>
+      </div>
+      <div>
+        <div>
+          <div class="input-group p-5">
+            <input
+              type="search"
+              class="form-control rounded bg-white"
+              placeholder="Search"
+              aria-label="Search"
+              aria-describedby="search-addon"
+              [(ngModel)]="search"
+              (keyup)="getCustomer($event)"
+              [ngModelOptions]="{ standalone: true }"
+            />
+            <button
+              type="button"
+              class="btn btn-primary text-white"
+              (click)="getAllCustomers(null)"
+            >
+              Search
+            </button>
+          </div>
+
+          <table
+            mat-table
+            [dataSource]="dataSource"
+            class="table card-table table-vcenter mat-elevation-z8"
+          >
+            <!-- AutoId Column -->
+            <ng-container matColumnDef="autoId">
+              <th mat-header-cell *matHeaderCellDef>ID</th>
+              <td mat-cell *matCellDef="let row">#{{ row.autoId }}</td>
+            </ng-container>
+            <ng-container matColumnDef="companyName">
+              <th mat-header-cell *matHeaderCellDef>Company</th>
+              <td mat-cell *matCellDef="let row">{{ row.companyName }}</td>
+            </ng-container>
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Name</th>
+              <td mat-cell *matCellDef="let row">{{ row?.name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="pincode">
+              <th mat-header-cell *matHeaderCellDef>PinCode</th>
+              <td mat-cell *matCellDef="let row">
+                <span>{{ row?.pinCode }}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="address">
+              <th mat-header-cell *matHeaderCellDef>Address</th>
+              <td mat-cell *matCellDef="let row">
+                <span>{{ row?.address }}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="gstNum">
+              <th mat-header-cell *matHeaderCellDef>GST Num</th>
+              <td mat-cell *matCellDef="let row">
+                <span>{{ row?.gstNum }}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Blocked</th>
+              <td mat-cell *matCellDef="let row">
+                <mat-slide-toggle
+                  [checked]="row?.userId?.isBlocked"
+                  (change)="changeUserStatus($event, row?.userId)"
+                >
+                </mat-slide-toggle>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>Action</th>
+              <td mat-cell *matCellDef="let row">
+                <a
+                  title="View"
+                  data-toggle="modal"
+                  data-target="#detailModal"
+                  (click)="sendUserData(row?._id, '')"
+                  href="javascript:void(0)"
+                >
+                  <mat-icon aria-hidden="false">visibility_outline</mat-icon>
+                </a>
+                <a
+                  href="javascript:void(0)"
+                  [routerLink]="['/admin/client/edit', row?._id]"
+                  ><mat-icon aria-hidden="false">edit_outline</mat-icon></a
+                >
+                <a
+                  title="Delete"
+                  (click)="openDeleteDialog(row._id)"
+                  href="javascript:void(0)"
+                >
+                  <mat-icon aria-hidden="false">delete_outline</mat-icon>
+                </a>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell text-center" colspan="12">
+                <strong>No data</strong>
+              </td>
+            </tr>
+          </table>
+
+          <mat-paginator
+            #paginator
+            [length]="total"
+            [pageSize]="10"
+            (page)="getAllCustomers($event)"
+          ></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="detailModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="detailModalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLongTitle">Client Details</h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+          <tr>
+            <th>Name</th>
+            <td>{{ singleUserData?.name }}</td>
+          </tr>
+          <tr>
+            <th>Company</th>
+            <td>{{ singleUserData?.companyName }}</td>
+          </tr>
+          <tr>
+            <th>GST Number</th>
+            <td>{{ singleUserData?.gstNum }}</td>
+          </tr>
+
+          <tr>
+            <th>Contact</th>
+            <td>
+              {{ singleUserData?.userId?.phone }}
+            </td>
+          </tr>
+          <tr>
+            <th>Email</th>
+            <td>{{ singleUserData?.userId?.email }}</td>
+          </tr>
+          <tr>
+            <th>Address</th>
+            <td>
+              {{ singleUserData?.address }}, {{ singleUserData?.city }} , {{ singleUserData?.country }} 
+              {{ singleUserData?.pinCode }}
+            </td>
+          </tr>
+          
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<!-- <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="exampleModalLongTitle">Customer Details</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-bordered">
+                <tr><th>Name</th><td>{{singleUserData?.name}}</td></tr>
+                <tr><th>Contact</th><td>{{singleUserData?.userId?.countryCode}} - {{singleUserData?.userId?.phone}}</td></tr>
+                <tr><th>Email</th><td>{{singleUserData?.userId?.email}}</td></tr>
+            
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div> -->

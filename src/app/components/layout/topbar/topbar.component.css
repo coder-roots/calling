@@ -1,0 +1,11 @@
+/* .app-sidebar__toggle {
+    left: 30px;
+    position: absolute;
+    top: 65px;
+} */
+@media only screen and (max-width: 600px) {
+  .app-sidebar__toggle {
+    left: 10px;
+    top: 0px;
+  }
+}

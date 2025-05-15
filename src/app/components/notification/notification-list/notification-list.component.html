@@ -1,0 +1,326 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+  <h4 class="page-title">Notifications</h4>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">
+      Notifications
+    </li>
+  </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW-1 -->
+<div class="row">
+  <div class="col-md-12 col-lg-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <h3 class="card-title">Notification List</h3>
+        <button class="btn btn-primary btn-sm" (click)="showAddModal()">
+          Add Notification
+        </button>
+      </div>
+      <div>
+        <div>
+          <form [formGroup]="filterForm">
+            <div class="row px-5 py-4 align-items-center">
+              <div class="col-md-1">
+                <strong>Filter By :</strong>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field appearance="legacy">
+                  <mat-label>Enter a date range</mat-label>
+                  <mat-date-range-input [rangePicker]="picker">
+                    <input
+                      matStartDate
+                      formControlName="startDate"
+                      placeholder="Start date"
+                    />
+                    <input
+                      matEndDate
+                      formControlName="endDate"
+                      placeholder="End date"
+                      (dateChange)="getAllNotifications(null)"
+                    />
+                  </mat-date-range-input>
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="picker"
+                  ></mat-datepicker-toggle>
+                  <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+              </div>
+              <div class="col-md-7">
+                <div class="input-group">
+                  <input
+                    type="search"
+                    class="form-control rounded bg-white"
+                    placeholder="Search"
+                    aria-label="Search"
+                    aria-describedby="search-addon"
+                    (keyup)="getAllNotifications($event)"
+                    [(ngModel)]="search"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-primary text-white"
+                    (click)="getAllNotifications(null)"
+                  >
+                    Search
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <ng-container matColumnDef="autoId">
+              <th mat-header-cell *matHeaderCellDef>ID</th>
+              <td mat-cell *matCellDef="let row">#{{ row.autoId }}</td>
+            </ng-container>
+            <ng-container matColumnDef="title">
+              <th mat-header-cell *matHeaderCellDef>Title</th>
+              <td mat-cell *matCellDef="let row">{{ row.title }}</td>
+            </ng-container>
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef>Description</th>
+              <td mat-cell *matCellDef="let row" class="elp-text">
+                {{ row.description }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="image">
+              <th mat-header-cell *matHeaderCellDef>Image</th>
+              <td mat-cell *matCellDef="let row">
+                <span
+                  class="badge p-1 text-white"
+                  [ngClass]="{
+                    'bg-primary': row?.isImage,
+                    'bg-dark ': !row?.isImage
+                  }"
+                  >{{ row.isImage | yesNo }}
+                </span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="system">
+              <th mat-header-cell *matHeaderCellDef>System Notification</th>
+              <td mat-cell *matCellDef="let row">
+                <span
+                  class="badge p-1 text-white"
+                  [ngClass]="{
+                    'bg-primary': row?.isAuto,
+                    'bg-dark ': !row?.isAuto
+                  }"
+                  >{{ row.isAuto | yesNo }}
+                </span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="createdAt">
+              <th mat-header-cell *matHeaderCellDef>Added On</th>
+              <td mat-cell *matCellDef="let row">
+                {{ row?.createdAt | date : "dd-MM-yy hh:mm a" }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>Action</th>
+              <td mat-cell *matCellDef="let row; let i = index">
+                <a
+                  href="javascript:void(0)"
+                  data-toggle="modal"
+                  data-target="#viewNotificationModal"
+                  (click)="showCurrentNotification(i)"
+                >
+                  <mat-icon>visibility_outline</mat-icon>
+                </a>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell text-center" colspan="12">
+                <strong>No data</strong>
+              </td>
+            </tr>
+          </table>
+          <mat-paginator
+            #paginator
+            [length]="total"
+            [pageSize]="10"
+            (page)="getAllNotifications($event)"
+          ></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Notification Modal -->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{ display: displayNotification }"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="addNotificationModal">Add Notification</h3>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          (click)="displayNotification = 'none'"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="addNotificationForm">
+          <div>
+            <mat-form-field appearance="legacy">
+              <mat-label>Title</mat-label>
+              <input matInput placeholder="title" formControlName="title" />
+              <mat-error
+                *ngIf="addNotificationForm.get('title')?.hasError('required')"
+              >
+                Please enter title.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mt-3">
+            <mat-form-field appearance="legacy">
+              <mat-label>Description</mat-label>
+              <textarea
+                matInput
+                placeholder="description"
+                formControlName="description"
+              ></textarea>
+              <mat-error
+                *ngIf="
+                  addNotificationForm.get('description')?.hasError('required')
+                "
+              >
+                Please enter description.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mt-3">
+            <mat-checkbox formControlName="isImage" #image
+              >Image Included</mat-checkbox
+            >
+          </div>
+
+          <div class="col-md-12 mt-3" *ngIf="image.checked">
+            <label for=""> Image <small></small></label>
+            <input
+              type="file"
+              class="form-control"
+              placeholder="Select Image"
+              #inputOFiles
+              (change)="fileSelected($event)"
+            />
+          </div>
+          <div class="d-flex justify-content-start mt-2">
+            <div class="col-md-6">
+              <div class="mt-2" *ngIf="isFileChosen">
+                <img
+                  [src]="imageSrc || 'http://placehold.it/180'"
+                  onerror="this.src='/assets/images/error/noimageavailable.png'"
+                  alt=""
+                  height="120"
+                  width="120"
+                />
+              </div>
+            </div>
+          </div>
+          <div align="center" class="mt-3">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="addNotification()"
+              tabindex="1"
+              [disabled]="addNotificationForm.invalid"
+            >
+              Add
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View Notification Modal-->
+
+<div
+  class="modal fade bd-example-modal-lg"
+  id="viewNotificationModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myLargeModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="font-weight-bold">Notification Details</h3>
+      </div>
+      <div class="modal-body px-2">
+        <table class="table table-bordered">
+          <tr>
+            <th>Title</th>
+            <td>{{ singleNotificationData.title }}</td>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <td>{{ singleNotificationData.description }}</td>
+          </tr>
+          <tr>
+            <th>System</th>
+            <td>
+              <span
+                class="badge p-1 text-white"
+                [ngClass]="{
+                  'bg-primary': singleNotificationData?.isAuto,
+                  'bg-dark ': !singleNotificationData?.isAuto
+                }"
+                >{{ singleNotificationData.isAuto | yesNo }}
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th>Image Included</th>
+            <td>
+              <span
+                class="badge p-1 text-white"
+                [ngClass]="{
+                  'bg-primary': singleNotificationData?.isImage,
+                  'bg-dark ': !singleNotificationData?.isImage
+                }"
+                >{{ singleNotificationData.isImage | yesNo }}
+              </span>
+            </td>
+          </tr>
+
+          <tr *ngIf="singleNotificationData.isImage">
+            <th>Image</th>
+            <td>
+              <a [href]="BaseUrl + singleNotificationData?.image" target="_blank">
+                <img
+                [src]="BaseUrl + singleNotificationData.image"
+                width="150px"
+                height="150px" onerror="this.src='/assets/images/error/noimageavailable.png'"
+              />
+              </a>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

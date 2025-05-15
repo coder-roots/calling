@@ -14,13 +14,19 @@ let imageStorageFun = multer.diskStorage({
     filename: function (req, file, cb) {
         let string = file.fieldname.split("_")
         req.body[string[1]] = Date.now() + path.extname(file.originalname)
-        cb(null, Date.now() + req.body[string[1]]) //Appending extension
+        cb(null, req.body[string[1]]) //Appending extension
     }
 })
 
 function unlinkImage(pic) {
     if (!!pic && !!pic.path) {
         fs.unlink(pic.path, (err) => { });
+    }
+}
+function unlinkImageUsingPath(path) {
+    if (!!path) {
+        console.log(path);
+        fs.unlink(path, (err) => { });
     }
 }
 
@@ -30,5 +36,6 @@ let uploadImageFun = multer({
 
 module.exports = {
     uploadImageFun,
+    unlinkImageUsingPath,
     unlinkImage
 }

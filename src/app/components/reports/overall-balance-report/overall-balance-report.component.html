@@ -1,0 +1,247 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+  <h4 class="page-title">Report</h4>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Overall Balance Report</li>
+  </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW-1 -->
+<div class="row">
+  <div class="col-md-12 col-lg-12">
+    <div class="card p-1">
+      <div class="card-header d-flex justify-content-between">
+        <h3 class="card-title">Overall Balance Report</h3>
+        <div class="d-flex justify-content-between">
+
+          <button class="btn btn-primary btn-sm mx-2" (click)="generateExcel()">
+            <i class="bi bi-file-earmark-spreadsheet"></i> Generate Excel
+          </button>
+
+          <button class="btn btn-primary btn-sm mx-2" (click)="generatePdf()">
+            <i class="bi bi-filetype-pdf"></i> Generate PDF
+          </button>
+
+        </div>
+      </div>
+      <div class="p-5">
+
+        <div class="row mt-3 align-items-center">
+          <!-- Choose a date -->
+
+          <div class="col-md-3 mt-3">
+            <form class="row px-2" [formGroup]="filterForm">
+              <mat-form-field>
+                <mat-label>Choose Date Range</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
+                  <input matStartDate formControlName="startDate" />
+                  <input matEndDate formControlName="endDate" (dateChange)="getReport()" />
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+              </mat-form-field>
+            </form>
+
+          </div>
+
+          <!-- Choose Company -->
+          <div class="col-md-2">
+            <ng-select [(ngModel)]="company" placeholder="Choose Company" [clearable]="false" class="w-100"
+              (change)="getReport()">
+              <ng-option value="" *ngIf="userType==1">All</ng-option>
+              <ng-option *ngFor="let company of companies" [value]="company">
+                {{ company }}
+              </ng-option>
+            </ng-select>
+          </div>
+
+
+          <div class="col-md-2">
+
+            <ng-select [(ngModel)]="courseId" placeholder="Choose Course" (change)="getReport()">
+              <ng-option value="">All</ng-option>
+              <ng-option *ngFor="let i of courseList" [value]="i._id">
+                {{i?.name}} - <span *ngIf="i?.courseType==1">Single</span><span *ngIf="i?.courseType==2">Combo</span>
+              </ng-option>
+            </ng-select>
+
+          </div>
+
+
+        </div>
+        <div class="table-responsive">
+          <table mat-table [dataSource]="dataSource" class="table table-bordered table-striped">
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="Sr">
+              <th mat-header-cell *matHeaderCellDef>Sr.</th>
+              <td mat-cell *matCellDef="let element; let i = index">#{{ i + 1 + (paginator.pageIndex *
+                paginator.pageSize) }} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="company">
+              <th mat-header-cell *matHeaderCellDef>company</th>
+              <td mat-cell *matCellDef="let element">{{element?.admissionId?.company}}</td>
+            </ng-container>
+            <!-- Name Column -->
+            <ng-container matColumnDef="admNo">
+              <th mat-header-cell *matHeaderCellDef>Adm No.</th>
+              <td mat-cell *matCellDef="let element">{{element?.admissionId?.admissionAutoId}}</td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>St Name</th>
+              <td mat-cell *matCellDef="let element"> {{element?.admissionId?.studentId?.studentName}}</td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="course">
+              <th mat-header-cell *matHeaderCellDef>Course</th>
+              <td mat-cell *matCellDef="let element">
+                <span *ngFor="let tech of element?.admissionId?.technologies; let i = index">
+                  {{ tech?.course?.name }}
+                  <span *ngIf="i < element?.admissionId?.technologies.length - 1">, </span>
+                </span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="startDate">
+              <th mat-header-cell *matHeaderCellDef>Start Date </th>
+              <td mat-cell *matCellDef="let element">{{element?.courseStartDate | date:'dd/MM/YYYY'}} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="trainingType">
+              <th mat-header-cell *matHeaderCellDef>Type</th>
+              <td mat-cell *matCellDef="let element">{{ element?.admissionId?.trainingType}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="collegeCourse">
+              <th mat-header-cell *matHeaderCellDef>College Course</th>
+              <td mat-cell *matCellDef="let element">{{ element?.admissionId?.collegeCourse}}</td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="totalFee">
+              <th mat-header-cell *matHeaderCellDef> Fee</th>
+              <td mat-cell *matCellDef="let element"> {{element?.totalFeesApplicable | currency:'INR'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="discount">
+              <th mat-header-cell *matHeaderCellDef>Discount</th>
+              <td mat-cell *matCellDef="let element"> {{element?.discount | currency:'INR'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="totalFeePayable">
+              <th mat-header-cell *matHeaderCellDef>Total Fee</th>
+              <td mat-cell *matCellDef="let element"> {{element?.totalFeeToBePaid | currency:'INR'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="regPayable">
+              <th mat-header-cell *matHeaderCellDef>Reg. Fee</th>
+              <td mat-cell *matCellDef="let element"> {{element?.registrationFeePayable | currency:'INR'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="regPending">
+              <th mat-header-cell *matHeaderCellDef>Reg. Pending</th>
+              <td mat-cell *matCellDef="let element"> {{element?.registrationFeePending | currency:'INR'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="feePaid">
+              <th mat-header-cell *matHeaderCellDef>T. Fee Paid</th>
+              <td mat-cell *matCellDef="let element"> {{element?.totalFeePaid | currency:'INR'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="tbalance">
+              <th mat-header-cell *matHeaderCellDef>T. Bal</th>
+              <td mat-cell *matCellDef="let element"> {{element?.totalBalance | currency:'INR'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="extra">
+              <th mat-header-cell *matHeaderCellDef>Ex. Fee</th>
+              <td mat-cell *matCellDef="let element"> {{element?.extra | currency:'INR'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="installmentNo">
+              <th mat-header-cell *matHeaderCellDef>T. Ins.</th>
+              <td mat-cell *matCellDef="let element"> {{element?.totalInstallments}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="i1">
+              <th mat-header-cell *matHeaderCellDef>I-1</th>
+              <td mat-cell *matCellDef="let element">
+                {{element?.installments[0]?.balance??element?.installments[0]?.amountToBePaid}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="i2">
+              <th mat-header-cell *matHeaderCellDef>I-2</th>
+              <td mat-cell *matCellDef="let element">
+                {{element?.installments[1]?.balance??element?.installments[1]?.amountToBePaid}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="i3">
+              <th mat-header-cell *matHeaderCellDef>I-3</th>
+              <td mat-cell *matCellDef="let element">
+                {{element?.installments[2]?.balance??element?.installments[2]?.amountToBePaid}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="i4">
+              <th mat-header-cell *matHeaderCellDef>I-4</th>
+              <td mat-cell *matCellDef="let element">
+                {{element?.installments[3]?.balance??element?.installments[3]?.amountToBePaid}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="i5">
+              <th mat-header-cell *matHeaderCellDef>I-5</th>
+              <td mat-cell *matCellDef="let element">
+                {{element?.installments[4]?.balance??element?.installments[4]?.amountToBePaid}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="i6">
+              <th mat-header-cell *matHeaderCellDef>I-6</th>
+              <td mat-cell *matCellDef="let element">
+                {{element?.installments[5]?.balance??element?.installments[5]?.amountToBePaid}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="i7">
+              <th mat-header-cell *matHeaderCellDef>I-7</th>
+              <td mat-cell *matCellDef="let element">
+                {{element?.installments[6]?.balance??element?.installments[6]?.amountToBePaid}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="i8">
+              <th mat-header-cell *matHeaderCellDef>I-8</th>
+              <td mat-cell *matCellDef="let element">
+                {{element?.installments[7]?.balance??element?.installments[7]?.amountToBePaid}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="i9">
+              <th mat-header-cell *matHeaderCellDef>I-9</th>
+              <td mat-cell *matCellDef="let element">
+                {{element?.installments[8]?.balance??element?.installments[8]?.amountToBePaid}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="i10">
+              <th mat-header-cell *matHeaderCellDef>I-10</th>
+              <td mat-cell *matCellDef="let element">
+                {{element?.installments[9]?.balance??element?.installments[9]?.amountToBePaid}} </td>
+            </ng-container>
+
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+          aria-label="Select page of periodic elements">
+        </mat-paginator>
+
+      </div>
+    </div>
+  </div>
+</div>

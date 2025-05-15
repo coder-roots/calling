@@ -1,0 +1,312 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+  <h4 class="page-title">Calculate fee</h4>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Calculate Fee</li>
+  </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW-1 -->
+<div class="row">
+  <div class="col-md-12 col-lg-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <h3 class="card-title">Course List</h3>
+        <div>
+          <div class="bg-grey mx-2" style="height:25px; width:25px; float:left"></div>
+          <span>Free Course</span>
+        </div>
+      </div>
+      <!-- course List -->
+      <div>
+
+
+        <table mat-table [dataSource]="dataSource" class="table card-table table-vcenter mat-elevation-z8">
+          <!-- AutoId Column -->
+          <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-checkbox class="example-margin"
+                  [checked]="allComplete"
+                  [indeterminate]="someComplete()"
+                  (change)="setAll($event.checked)"
+                  color="primary">
+                  All
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row; let i = index">
+              <mat-checkbox [(ngModel)]="row.checked"
+                        (ngModelChange)="updateAllComplete(i)"
+                        color="primary">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Course</th>
+            <td mat-cell *matCellDef="let row">{{ row?.course.name }}</td>
+          </ng-container>
+
+          <!-- Course Type Column -->
+          <ng-container matColumnDef="courseType">
+            <th mat-header-cell *matHeaderCellDef>Course Type</th>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row?.course.courseType == '1'">Single</span>
+              <span *ngIf="row?.course.courseType == '2'">Combo</span>
+            </td>
+          </ng-container>
+
+          <!-- Fee Column -->
+          <ng-container matColumnDef="fee">
+            <th mat-header-cell *matHeaderCellDef>Course Fee</th>
+            <td mat-cell *matCellDef="let row">
+              Prev:{{ row?.fee | currency:"INR" }} <br>
+              Current:{{ row?.course?.fee | currency:"INR" }}
+            </td>
+          </ng-container>
+
+          <!-- Minimum Registraion fee Column -->
+          <ng-container matColumnDef="minimumRegistrationFee">
+            <th mat-header-cell *matHeaderCellDef>Minimum Registration</th>
+            <td mat-cell *matCellDef="let row">
+              Prev:{{ row?.minimumRegistrationFee | currency:"INR"}} <br>
+              Current:{{ row?.course?.minimumRegistrationFee | currency:"INR" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="installments">
+            <th mat-header-cell *matHeaderCellDef>Installments</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row?.installments}}
+            </td>
+          </ng-container>
+
+          <!-- Course Discount Column -->
+          <ng-container matColumnDef="courseDiscount">
+            <th mat-header-cell *matHeaderCellDef>Discount Given</th>
+            <td mat-cell *matCellDef="let row">{{ row?.discount | currency:"INR" }}</td>
+          </ng-container>
+
+          <!-- Duration Column -->
+          <ng-container matColumnDef="duration">
+            <th mat-header-cell *matHeaderCellDef>Duration</th>
+            <td mat-cell *matCellDef="let row">{{ row?.duration }}</td>
+          </ng-container>
+
+
+          <!-- <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>Action</th>
+                <td mat-cell *matCellDef="let row">
+                  <a href="javascript:void(0)" [routerLink]="['/admin/course/edit',row?._id]"
+                    ><mat-icon aria-hidden="false">edit_outline</mat-icon></a>
+                </td>
+              </ng-container> -->
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" [ngClass]="row?.fee==0 ? 'bg-grey' : ''"></tr>
+
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell text-center" colspan="12">
+              <strong>No data</strong>
+            </td>
+          </tr>
+        </table>
+
+
+      </div>
+      <!-- calculate form -->
+      <div class="mt-4 p-3">
+        <form [formGroup]="feeForm">
+          <div class="row">
+            <div class="col-md-4">
+              <section class="example-section">
+                <mat-form-field appearance="legacy">
+                  <mat-label>Total Fee Applicable</mat-label>
+                  <input matInput placeholder="Fee Applicable" formControlName="totalFeesApplicable" readonly />
+                </mat-form-field>
+              </section>
+            </div>
+            <div class="col-md-4">
+              <section class="example-section">
+                <mat-form-field appearance="legacy">
+                  <mat-label>Total Payable</mat-label>
+                  <input matInput placeholder="Payable" formControlName="totalFeeToBePaid" readonly  />
+                  <mat-error *ngIf="feeForm.get('totalFeeToBePaid')?.hasError('required')">
+                    Please enter totalFeeToBePaid.
+                  </mat-error>
+                </mat-form-field>
+              </section>
+            </div>
+            <div class="col-md-4">
+              <section class="example-section">
+                <mat-form-field appearance="legacy">
+                  <mat-label>Total Discount</mat-label>
+                  <input matInput type="number" placeholder="Discount" formControlName="discount" (blur)="checkRegistration()" (keyup)="changeInDiscount($event)" />
+                  <mat-error *ngIf="feeForm.get('discount')?.hasError('required')">
+                    Please enter discount.
+                  </mat-error>
+                </mat-form-field>
+              </section>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <section class="example-section">
+                <mat-form-field appearance="legacy">
+                  <mat-label>Total Registration Fee</mat-label>
+                  <input matInput placeholder="Total Registration Fee" formControlName="totalRegistrationFee" readonly (blur)="checkRegistration()" />
+                  <mat-error *ngIf="feeForm.get('totalRegistrationFee')?.hasError('required')">
+                    Please enter total Registration Fee.
+                  </mat-error>
+                </mat-form-field>
+              </section>
+            </div>
+            <div class="col-md-4">
+              <section class="example-section">
+                <mat-form-field appearance="legacy">
+                  <mat-label>Pending Registration</mat-label>
+                  <input matInput placeholder="Pending Registration" [value]="changeInPendingRegistration()" readonly />
+                </mat-form-field>
+              </section>
+            </div>
+            <div class="col-md-4">
+              <section class="example-section">
+                <mat-form-field appearance="legacy">
+                  <mat-label>Registration Fee Paid</mat-label>
+                  <input matInput placeholder="Registration Fee Paid" formControlName="registrationFeePaid" (keyup)="checkRegistration()" />
+                  <mat-error *ngIf="feeForm.get('registrationFeePaid')?.hasError('required')">
+                    Please enter Registration Fee Paid.
+                  </mat-error>
+                </mat-form-field>
+              </section>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <section class="example-section">
+                <mat-form-field appearance="legacy">
+                  <mat-label>Installment Fee</mat-label>
+                  <input matInput placeholder="Installment Fee" [value]="calcInstallmentFee()" readonly />
+                </mat-form-field>
+              </section>
+            </div>
+            <div class="col-md-4">
+              <section class="example-section">
+                <mat-form-field appearance="legacy">
+                  <mat-label>Total Installments</mat-label>
+                  <input type="number" matInput placeholder="Total Installments" formControlName="totalInstallments" />
+                  <mat-error *ngIf="feeForm.get('totalInstallments')?.hasError('required')">
+                    Please enter total Installments.
+                  </mat-error>
+                </mat-form-field>
+              </section>
+            </div>
+            <div class="col-md-4">
+              <section class="example-section">
+                <mat-form-field appearance="legacy">
+                  <mat-label>Choose Start date</mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="courseStartDate">
+                  <mat-hint>MM/DD/YYYY</mat-hint>
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </section>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-primary d-block m-auto" (click)="calculate()" tabindex="1" >
+            Calculate Fee
+          </button>
+
+          <div class="mt-2" formArrayName="installments">
+            <div class="" *ngFor="let i of installments.controls; let index = index"
+                [formGroupName]="index">
+
+
+                    <div class="row">
+                        <div class="col-md-4">
+                          <mat-form-field appearance="legacy">
+                            <mat-label>Installment Number</mat-label>
+                            <input matInput placeholder="Installment Count" formControlName="installmentNo"
+                                readonly />
+                        </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Amount</mat-label>
+                                <input matInput placeholder="Amount" formControlName="amountToBePaid" />
+                                <mat-error *ngIf="feeForm.get('amountToBePaid')?.hasError('required')">
+                                    Please enter Amount.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-4 d-flex">
+                            <label> Pay Month</label>
+                            <select formControlName="installmentMonth" class="form-control">
+                              <ng-container *ngFor="let i of monthArray">
+                                  <option [value]="i?.monthIndex">{{i?.monthName}}</option>
+                              </ng-container>
+                            </select>
+                      </div>
+
+                    </div>
+            </div>
+          </div>
+
+
+
+          <button class="btn btn-primary d-block m-auto" *ngIf="showSave" (click)="submit()" tabindex="1" [disabled]="feeForm.invalid">
+            Save
+          </button>
+        </form>
+      </div>
+      <!-- fee detail -->
+      <!-- <div class="mt-4 p-3">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th class="bg-primary" style="color: white !important;height:50px;" colspan="6">
+                Fee Detail
+                <button mat-raised-button color="secondary" matBadge="8" matBadgePosition="before"
+                  matBadgeColor="accent" *ngIf="enquiryData?.isOfficialTraining">
+                  Start From : {{feeData?.courseStartDate | date}}
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td width="19%">Total Fee Applicable</td>
+              <td width="14%">{{feeData?.totalFeesApplicable | currency :"INR"}}</td>
+              <td width="19%">Discount</td>
+              <td width="14%">{{feeData?.discount | currency :"INR"}}</td>
+              <td width="19%">Total Fee to be paid</td>
+              <td width="14%"><b>{{feeData?.totalFeeToBePaid | currency :"INR"}}</b></td>
+            </tr>
+            <tr>
+              <td>Total Registration</td>
+              <td><b>{{feeData?.totalRegistrationFee | currency :"INR"}}</b></td>
+              <td>Registration Paid</td>
+              <td>{{feeData?.registrationFeePaid | currency :"INR"}}</td>
+              <td>Pending Registration</td>
+              <td>{{feeData?.pendingRegistrationFee | currency :"INR"}}</td>
+            </tr>
+            <tr *ngFor="let i of feeData?.installments; let index= index">
+              <td>Installment</td>
+              <td>{{index+1}}</td>
+              <td>Month</td>
+              <td>{{i?.month}}</td>
+              <td>Amount</td>
+              <td><b>{{i?.amountToBePaid | currency :"INR"}}</b></td>
+            </tr>
+
+          </tbody>
+
+        </table>
+      </div> -->
+    </div>
+  </div>

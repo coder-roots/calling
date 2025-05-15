@@ -1,0 +1,146 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <h4 class="page-title">Course</h4>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Course</li>
+    </ol>
+  </div>
+  <!-- PAGE-HEADER END -->
+  
+  <!-- ROW-1 -->
+  <div class="row">
+    <div class="col-md-12 col-lg-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between">
+          <h3 class="card-title">Course List</h3>
+          <button class="btn btn-primary btn-sm" routerLink="/admin/course/add">
+            + Add Course
+          </button>
+        </div>
+        <div>
+          <div>
+            <div class="input-group p-5">
+              <input
+                type="search"
+                (keyup)="getCourse($event)"
+                class="form-control rounded bg-white"
+                placeholder="Search"
+                aria-label="Search"
+                aria-describedby="search-addon"
+                [(ngModel)]="search"
+              />
+              <button
+                type="button"
+                class="btn btn-primary text-white"
+                (click)="getAllCourse(null)"
+              >
+                Search
+              </button>
+            </div>
+  
+            <table
+              mat-table
+              [dataSource]="dataSource"
+              class="table card-table table-vcenter mat-elevation-z8"
+            >
+              <!-- AutoId Column -->
+              <ng-container matColumnDef="courseAutoId">
+                <th mat-header-cell *matHeaderCellDef>ID</th>
+                <td mat-cell *matCellDef="let row">#{{ row.courseAutoId }}</td>
+              </ng-container>
+  
+              <!-- Image Column -->
+              <ng-container matColumnDef="image">
+                <th mat-header-cell *matHeaderCellDef>Image</th>
+                <td mat-cell *matCellDef="let row">
+                    <img [src]="getImageUrl(row?.trimImage)" alt="">
+                </td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Course</th>
+                <td mat-cell *matCellDef="let row" style="width:150px">
+                  <span *ngIf="row?.courseType == '1'">Single</span>
+                  <span *ngIf="row?.courseType == '2'">Combo</span>
+                  - {{ row?.name }}</td>
+              </ng-container>
+
+              <!-- Course Type Column -->
+              <!-- <ng-container matColumnDef="courseType">
+                <th mat-header-cell *matHeaderCellDef>Course Type</th>
+                <td mat-cell *matCellDef="let row" style="width:100px">
+                  
+                </td>
+              </ng-container> -->
+
+              <!-- Fee Column -->
+              <ng-container matColumnDef="fee">
+                <th mat-header-cell *matHeaderCellDef>Course Fee</th>
+                <td mat-cell *matCellDef="let row">{{ row?.fee | currency:"INR" }}</td>
+              </ng-container>
+
+              <!-- Minimum Registraion fee Column -->
+              <ng-container matColumnDef="minimumRegistrationFee">
+                <th mat-header-cell *matHeaderCellDef>Registration</th>
+                <td mat-cell *matCellDef="let row">{{ row?.minimumRegistrationFee | currency:"INR"}}</td>
+              </ng-container>
+
+               <!-- Duration Column -->
+               <ng-container matColumnDef="duration">
+                <th mat-header-cell *matHeaderCellDef>Duration</th>
+                <td mat-cell *matCellDef="let row">{{ row?.duration.duration }}</td>
+              </ng-container>
+
+               <!-- Detail Column -->
+               <!-- <ng-container matColumnDef="detail">
+                <th mat-header-cell *matHeaderCellDef>Detail</th>
+                <td mat-cell *matCellDef="let row" width="150px">{{ row?.detail}}</td>
+              </ng-container> -->
+
+              <ng-container matColumnDef="createdAt">
+                <th mat-header-cell *matHeaderCellDef>Created At</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ row?.createdAt | date }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>Action</th>
+                <td mat-cell *matCellDef="let row">
+                  <a href="javascript:void(0)" [routerLink]="['/admin/course/edit',row?._id]"
+                    ><mat-icon aria-hidden="false">edit_outline</mat-icon></a
+                  >
+                  <a  *appHasRole="['COURSE-DELETE']"
+                    title="Delete"
+                    (click)="openDeleteDialog(row._id)"
+                    href="javascript:void(0)"
+                  >
+                    <mat-icon aria-hidden="false">delete_outline</mat-icon>
+                  </a>
+                </td>
+              </ng-container>
+  
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  
+              <!-- Row shown when there is no matching data. -->
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell text-center" colspan="12">
+                  <strong>No data</strong>
+                </td>
+              </tr>
+            </table>
+  
+            <mat-paginator
+              #paginator
+              [length]="total"
+              [pageSize]="10"
+              (page)="getAllCourse($event)"
+            ></mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

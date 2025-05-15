@@ -1,0 +1,8 @@
+.app-sidebar__user {
+    border-bottom: 0;
+    height: 35px;
+}
+
+.active{
+    background-color: gray!important;
+}

@@ -1,0 +1,89 @@
+<div class="container mt-5">
+    <div class="row px-5 pt-5">
+        <div class="col-6">
+            <div class="col-12">
+                <img src="assets/images/o7-logo.png" class="img-fluid" style="height:70px" alt="">
+            </div>
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="col-5 text-center my-0">
+                    <span class="iso">An ISO 9001:2015</span> <br>
+                    <span class="certified my-0">Certfied Company</span>
+                </div>
+                <div class="col-5"></div>
+            </div>
+        </div>
+        <div class="col-6">
+            <p class="address my-2">2nd Floor Badwal Complex</p>
+            <p class="address my-2">Near Narinder Cinema,Bus Stand, Jalandhar</p>
+            <p class="numbers my-2">0181-5015007,84373-65007 </p>
+            <p class="address-website my-2">www.o7services.com</p>
+        </div>
+    </div>
+    <br>
+    <div class="row px-5 my-4 text-center center-line">
+        <div class="col-4">Date: {{data?.collectedOn | date}}</div>
+        <div class="col-4 font-weight-bold" style="font-size: 20px;">RECEIPT No. {{data?.receiptType==1?data?.manualReceiptNumber:data?.feeReceiptAutoId}}</div>
+        <div class="col-4">ID: {{data?.admissionId?.admissionAutoId}}</div>
+    </div>
+    <br>
+    <div class="row px-5 mb-4">
+        <div class="center-line italic pl-2" style="width:23%">Recieved from Mr./Ms</div>
+        <div class="bdr font-size-lg" style="width:41%">{{data?.admissionId?.studentId?.studentName}}</div>
+        <div style="width:2%"></div>
+        <div class="center-line italic" style="width:14%">Contact No.</div>
+        <div class="bdr font-size-lg" style="width:18%">{{data?.admissionId?.studentId?.personalContact}}</div>
+    </div>
+    <div class="row px-5 mb-4">
+        <div class="pl-2 center-line italic" style="width:30%">The Sum of Rupees(In words)</div>
+        <div class="center-line bdr" style="width:68%">{{ changeToWords(data?.amountPaid) }}</div>
+    </div>
+    <div class="row px-5 mb-4">
+        <div class="pl-2 center-line italic" style="width:22%">Being Paying Against</div>
+        <div class="bdr font-size-lg" style="width:76%">
+          <ng-container *ngIf="(data?.courseTaken==null || data?.courseTaken==undefined)">
+            <span *ngFor="let i of data?.admissionId?.technologies">{{i?.course.name}}, </span>
+          </ng-container>
+          <ngc-container *ngIf="!!data?.courseTaken">
+            <span>{{data?.courseTaken}}</span>
+          </ngc-container>
+        </div>
+    </div>
+    <div class="row px-5 mb-4">
+        <div class="pl-2 center-line italic" style="width:16%">College name</div>
+        <div class="bdr font-size-lg" style="width:34%">{{data?.admissionId?.college?.name}}</div>
+        <div style="width:2%"></div>
+        <div class="center-line italic" style="width:16%">Installment No.</div>
+        <div class="bdr font-size-lg" style="width:30%">
+            <span *ngIf="data?.installmentNumber!=0">{{data?.installmentNumber}}</span>
+            <span *ngIf="data?.installmentNumber==0">Registration</span>
+        </div>
+    </div>
+
+    <div class="row px-5 mb-4">
+        <div class="center-line italic pl-2" style="width:14%">Collected By</div>
+        <div class="bdr font-size-lg" style="width:20%">{{data?.collectedBy?.name}}</div>
+        <div style="width:2%"></div>
+        <div class="center-line italic" style="width:18%">Payment Method</div>
+        <div class="bdr font-size-lg" style="width:12%">{{data?.paymentMethod}}</div>
+        <div style="width:2%"></div>
+        <!-- <div class="center-line italic" style="width:9%">Remarks</div>
+        <div class="bdr font-size-lg" style="width:21%">{{data?.remarks}}</div> -->
+    </div>
+    <div class="row px-5 mt-5">
+        <div class="col-3 px-0 p-5 amount font-weight-bold">Rs. {{data?.amountPaid}} /-</div>
+        <div class="col-3 px-0"></div>
+        <div class="col-3 px-0"></div>
+        <div class="col-3 pl-0 pr-2 signature text-right italic position-relative">
+            Authorised Signatory
+            <img src="assets/images/sign.png" class="sign-img position-absolute w-50" alt="">
+        </div>
+    </div>
+    <div class="row px-5 no-print">
+        <div class="col-12 px-0 text-center italic">
+            <button class="btn mt-5 btn-primary text-white" (click)="print()">
+                Print <mat-icon>print</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>

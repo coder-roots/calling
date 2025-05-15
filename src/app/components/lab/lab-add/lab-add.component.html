@@ -1,0 +1,34 @@
+<h1 class="shadow text-center" mat-dialog-title>{{ type }} Lab</h1>
+
+<!-- <mat-dialog-content> -->
+  <form [formGroup]="labForm">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="legacy">
+            <mat-label>Lab</mat-label>
+            <input matInput placeholder="Lab" formControlName="name" />
+            <mat-error *ngIf="labForm.get('name')?.hasError('required')">
+              Please enter lab name.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="legacy">
+            <mat-label>Capacity</mat-label>
+            <input matInput placeholder="Capacity" formControlName="capacity" />
+            <mat-error *ngIf="labForm.get('capacity')?.hasError('required')">
+              Please enter capacity.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <mat-dialog-actions align="center">
+      <button mat-raised-button color="primary" (click)="submit()" tabindex="1">
+        {{ type }} Lab
+      </button>
+      <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+    </mat-dialog-actions>
+  </form>
+<!-- </mat-dialog-content> -->

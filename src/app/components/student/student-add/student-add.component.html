@@ -1,0 +1,93 @@
+<h1 class="shadow text-center" mat-dialog-title>{{ type }} Student</h1>
+
+<!-- <mat-dialog-content> -->
+<form [formGroup]="studentForm">
+  <div class="container">
+    <div class="row">
+
+      <div class="col">
+        <mat-form-field appearance="legacy">
+          <mat-label>Choose Company</mat-label>
+          <mat-select formControlName="company" placeholder="Choose Company">
+            <mat-option *ngFor="let company of companies" [value]="company">
+              {{ company }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="studentForm.get('company')?.hasError('required') && studentForm.get('company')?.touched">
+            Please choose a company.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+
+
+      <div class="col">
+        <mat-form-field appearance="legacy">
+          <mat-label>Student Name</mat-label>
+          <input matInput placeholder="Student Name" formControlName="studentName" />
+          <mat-error *ngIf="studentForm.get('studentName')?.hasError('required')">
+            Please enter student name.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col">
+        <mat-form-field appearance="legacy">
+          <mat-label>Email</mat-label>
+          <input matInput placeholder="Email" formControlName="email" />
+          <mat-error *ngIf="studentForm.get('email')?.hasError('required')">
+            Please enter email.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <mat-form-field appearance="legacy">
+          <mat-label>Personal Contact</mat-label>
+          <input matInput placeholder="Personal Contact" formControlName="personalContact" />
+          <mat-error *ngIf="studentForm.get('personalContact')?.hasError('required')">
+            Please enter Personal Contact.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col">
+        <mat-form-field appearance="legacy">
+          <mat-label>Parent Contact</mat-label>
+          <input matInput placeholder="Parents Contact" formControlName="parentsContact" />
+          <mat-error *ngIf="studentForm.get('parentsContact')?.hasError('required')">
+            Please enter Parents Contact.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <mat-form-field appearance="legacy">
+          <mat-label>Father's Name</mat-label>
+          <input matInput placeholder="Father's Name" formControlName="fatherName" />
+          <mat-error *ngIf="studentForm.get('fatherName')?.hasError('required')">
+            Please enter father's name.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <mat-form-field appearance="legacy">
+          <mat-label>Address</mat-label>
+          <input matInput placeholder="Address" formControlName="address" />
+          <mat-error *ngIf="studentForm.get('address')?.hasError('required')">
+            Please enter address.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <mat-dialog-actions align="center">
+    <button mat-raised-button color="primary" (click)="submit()" tabindex="1">
+      {{ type }} Student
+    </button>
+    <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+  </mat-dialog-actions>
+</form>
+<!-- </mat-dialog-content> -->

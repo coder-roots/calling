@@ -6,9 +6,11 @@ var userSchema = mongoose.Schema({
     email: { type: String, default: '' },
     phone: { type: String, default: 0 },
 
-    userType: { type: Number, default: 1 },
+    userType: { type: Number, default: 2 },
     password: { type: String, default: '' },
-    
+    employeeId:{ type:mongoose.Schema.Types.ObjectId, default:null, ref:'employee'},
+    role: { type: mongoose.Schema.Types.ObjectId, default: null, ref: 'role' },
+
     isDelete: { type: Boolean, default: false },
     isBlocked: { type: Boolean, default: false },
 
@@ -17,9 +19,8 @@ var userSchema = mongoose.Schema({
 
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: null },
-    status: { type: Boolean, default: true }
-
-
+    status: { type: Boolean, default: true },
+    assignedCompanies: [{type:String,default:null}]
 })
 
 module.exports = mongoose.model('user', userSchema)

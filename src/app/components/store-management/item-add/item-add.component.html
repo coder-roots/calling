@@ -1,0 +1,105 @@
+<h1 class="shadow text-center" mat-dialog-title>{{ type }} StoreItem</h1>
+
+<!-- <mat-dialog-content> -->
+    <form [formGroup]="storeItemForm">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <mat-form-field appearance="legacy">
+                        <mat-label>Item Type</mat-label>
+                        <mat-select formControlName="itemType">
+                            <mat-option value="Hardware"> Hardware </mat-option>
+                            <mat-option value="Material"> Material </mat-option>
+                            <mat-option value="Kitchen"> Kitchen </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col">
+                    <mat-form-field appearance="legacy">
+                        <mat-label>Store Item</mat-label>
+                        <input matInput placeholder="name" formControlName="name" />
+                        <mat-error *ngIf="storeItemForm.get('name')?.hasError('required')">
+                            Please enter name.
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="legacy">
+                        <mat-label>Quantity <span *ngIf="storeItemForm.value.itemType == 'Kitchen'">(Items In Stock)</span></mat-label>
+                        <input type="number" min="1" matInput placeholder="Quantity" formControlName="quantity" />
+                        <mat-error *ngIf="storeItemForm.get('quantity')?.hasError('required')">
+                            Please enter quantity.
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col"  *ngIf="storeItemForm.value.itemType == 'Kitchen'">
+                    <mat-form-field appearance="legacy">
+                        <mat-label>Items In Use</mat-label>
+                        <input type="number" min="0" matInput placeholder="Items In Use" formControlName="inUse" />
+                        <mat-error *ngIf="storeItemForm.get('inUse')?.hasError('required')">
+                            Please enter Items in use.
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="legacy">
+                        <mat-label>Comments</mat-label>
+                        <input matInput placeholder="comments" formControlName="comments" />
+                        <!-- <mat-error *ngIf="storeItemForm.get('comments')?.hasError('required')">
+                            Please enter comments.
+                        </mat-error> -->
+                    </mat-form-field>
+                </div>
+
+                <div class="col" *ngIf="storeItemForm.value.itemType == 'Hardware'">
+                    <mat-form-field appearance="legacy">
+                        <mat-label>Issue date</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="issueDate">
+                        <mat-hint>MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col" *ngIf="storeItemForm.value.itemType == 'Hardware'">
+                    <mat-form-field appearance="legacy">
+                        <mat-label>Submit date</mat-label>
+                        <input matInput [matDatepicker]="picker1" formControlName="submitDate">
+                        <mat-hint>MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col" *ngIf="storeItemForm.value.itemType == 'Hardware'">
+                    <mat-form-field appearance="legacy">
+                        <mat-label>Assigned To</mat-label>
+                        <mat-select formControlName="assignedTo">
+                            <mat-option *ngFor="let i of employeeList" [value]="i._id">
+                                {{i?.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col" *ngIf="storeItemForm.value.itemType == 'Material'">
+                    <mat-form-field appearance="legacy">
+                        <mat-label>Lab</mat-label>
+                        <mat-select formControlName="labId">
+                            <mat-option *ngFor="let i of labList" [value]="i._id">
+                                {{i?.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+
+        </div>
+        <mat-dialog-actions align="center">
+            <button mat-raised-button color="primary" (click)="submit()" tabindex="1">
+                {{ type }} StoreItem
+            </button>
+            <button mat-raised-button mat-dialog-close tabindex="-1">Cancel</button>
+        </mat-dialog-actions>
+    </form>
+<!-- </mat-dialog-content> -->

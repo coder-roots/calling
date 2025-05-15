@@ -1,0 +1,7 @@
+textarea {
+  border:1px solid #cccccc;
+  resize: none !important;
+}
+textarea:focus {
+  border: 1px solid #cccccc !important;
+}

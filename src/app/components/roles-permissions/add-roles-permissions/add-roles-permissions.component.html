@@ -1,0 +1,85 @@
+<!-- PAGE-HEADER -->
+<div class="page-header">
+  <h4 class="page-title">{{ type }} Role</h4>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a [routerLink]="['/admin/home']">Home</a></li>
+    <li class="breadcrumb-item">
+      <a [routerLink]="['/admin/roles']">Roles</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">{{ type }}</li>
+  </ol>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW-1 -->
+<div class="row">
+  <div class="col-md-12 col-lg-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <h3 class="card-title">{{ type }} Role</h3>
+        <button class="btn btn-primary btn-sm" [routerLink]="['/admin/roles']">
+          Role List
+        </button>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="roleForm" (ngSubmit)="submit()">
+          <div class="row">
+            <div class="col-md-12">
+              <label class="font-weight-bold" for="name">Role</label>
+              <mat-form-field appearance="legacy">
+                <mat-label>Role</mat-label>
+                <input formControlName="name" matInput placeholder="Name" />
+                <mat-error
+                  *ngIf="
+                    roleForm.get('name')?.invalid ||
+                    roleForm.get('name')?.touched
+                  "
+                  >Required.</mat-error
+                >
+              </mat-form-field>
+            </div>
+            <div class="form-group col-md-12 mt-2">
+              <label class="font-weight-bold" for="name"
+                >Select Permissions</label
+              >
+            </div>
+          </div>
+          <div class="row">
+            <div class="mt-2 form-group col-md-3 row mb-2 mx-1">
+              <mat-checkbox
+                [checked]="allSelected"
+                (change)="setAll($event.checked)"
+                #selectAlls
+                >Select All</mat-checkbox
+              >
+            </div>
+          </div>
+          <div class="row">
+            <div
+              class="form-group col-md-3 row mb-2 mx-1"
+              *ngFor="let per of items"
+            >
+              <mat-checkbox
+                [(ngModel)]="per.checked"
+                (ngModelChange)="updateAllComplete(per.name, $event)"
+                [ngModelOptions]="{ standalone: true }"
+                >{{ per.name }}</mat-checkbox
+              >
+            </div>
+            <div class="col-md-12 text-center">
+              <button
+                type="submit"
+                mat-flat-button
+                color="primary"
+                [disabled]="roleForm.invalid"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ROW-1 CLOSED -->

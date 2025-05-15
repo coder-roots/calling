@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-const dbPath = process.env.DBPATH || 'mongodb+srv://Gaurav123:o7empPass123@o7emp01.cabzh.mongodb.net/admin-management';
 
+const dbPath = "mongodb+srv://office:softwareoffice@officesoft.mjwwrmt.mongodb.net/o7-fee"
+// const dbPath = 'mongodb://localhost:27017/o7-fee'
 const options = { useNewUrlParser: true, useUnifiedTopology: true }
 const mongo = mongoose.connect(dbPath, options); mongo.then(() => {
     logger.info('DB Connected');
@@ -14,3 +15,6 @@ const mongo = mongoose.connect(dbPath, options); mongo.then(() => {
 exports.isValid = function (id) {
     return mongoose.Types.ObjectId.isValid(id)
 }
+
+
+//softwareoffice
