@@ -1,6 +1,3 @@
-const calculateFeeModel = require('../calculateFees/calculateFeeModel');
-const CalculateFee = require('../calculateFees/calculateFeeModel');
-const feeReceiptModel = require('../feeReceipt/feeReceiptModel');
 const SessionYear = require('../sessionYear/sessionYearModel')
 const moment = require('moment');
 const { ObjectId } = require('mongodb');
@@ -21,48 +18,6 @@ async function registrationDefaulter(req, res, next) {
 
 function registrationDefaulterFun(req, next) {
   return new Promise((resolve, reject) => {
-    let formData = {};
-    if (req.body != undefined) formData = req.body;
-
-    let oneMonthBack = moment().subtract(1, 'months');
-    let utctime = moment(oneMonthBack).startOf('day').toDate();
-    let { sessionYearId, courseId, company } = formData;
-
-
-    let query = {
-      courseStartDate: { $lte: utctime },
-      isRegistrationFeePending: true,
-      sessionYearId: sessionYearId,
-    };
-
-    CalculateFee.find(query)
-      .populate({
-        path: "admissionId",
-        match: {
-          ...(company && { company }),
-          ...(courseId && {
-            "technologies.course": courseId,
-          }),
-        },
-        populate: [
-          { path: "technologies.course" },
-          { path: "studentId" },
-        ],
-      })
-      .exec()
-      .then(alldocuments => {
-
-        alldocuments = alldocuments.filter(doc => doc.admissionId !== null);
-
-        resolve({
-          status: 200,
-          success: true,
-          total: alldocuments.length,
-          message: "All Registration Defaulters Loaded",
-          data: alldocuments,
-        });
-      })
-      .catch(next);
   });
 }
 

@@ -1,5 +1,4 @@
 const Student = require('./studentModel')
-const Admission = require('../admission/admissionModel')
 const SessionYear = require('../sessionYear/sessionYearModel')
 const Joi = require('joi')
 const helper = require('../../utilities/helper')
@@ -205,11 +204,7 @@ function updateStudentFun(req, next) {
                             if (isValidated) {
                                 res.save()
                                     .then(async res => {
-                                        const addmissionData = await Admission.findOne({ studentId: res._id })
-                                        if (addmissionData) {
-                                            if (!!formData.company) addmissionData.company = formData.company
-                                            addmissionData.save()
-                                        }
+                                        
                                         {
                                             resolve({
                                                 status: 200,

@@ -1,23 +1,19 @@
 const sharp = require('sharp');
 
-const router = require('express').Router()
+const router = require('express').Router() 
 const userController = require('../apis/user/userController')
 const roleAndPermissionController = require('../apis/roleAndPermission/roleAndPermissionController')
 const courseController = require('../apis/course/courseController')
 const employeeController = require('../apis/employee/employeeController')
 const labController = require ('../apis/lab/labController.js')
-const feeReceiptController = require ('../apis/feeReceipt/feeReceiptController.js')
 const durationController = require ('../apis/duration/durationController.js')
 const collegeController = require ('../apis/college/collegeController.js')
 const collegeCourseController = require ('../apis/collegeCourse/collegeCourseController.js')
-const timeSlotController = require ('../apis/timeSlot/timeSlotController.js')
 const enquiryController = require ('../apis/enquiry/enquiryController.js')
 const callController = require ('../apis/call/callController.js')
 const callSheetController = require ('../apis/callSheet/callSheetController.js')
 const callSheetDetailController = require ('../apis/callSheetDetail/callSheetDetailController.js')
 const studentController = require ('../apis/student/studentController.js')
-const admissionController = require ('../apis/admission/admissionController.js')
-const calculateFeeController = require ('../apis/calculateFees/calculateFeeController')
 const storeItemController = require ('../apis/storeItem/storeItemController')
 const clientController = require ('../apis/client/clientController')
 const dashboardController = require ('../apis/dashboard/dashboardController')
@@ -146,24 +142,6 @@ router.post('/lab/update', labController.updateLab)
 router.post('/lab/delete', labController.deleteLab)
 
 
-/** Fee Receipt Routes*/
-router.post('/feeReceipt/all', feeReceiptController.index)
-router.post('/feeReceipt/single', feeReceiptController.fetchFeeReceiptById)
-router.post('/feeReceipt/add', feeReceiptController.addFeeReceipt)
-router.post('/feeReceipt/direct/add', feeReceiptController.addFeeReceiptOfDirectCollection)
-router.post('/feeReceipt/update', feeReceiptController.updateFeeReceipt)
-router.post('/feeReceipt/delete', feeReceiptController.deleteFeeReceipt)
-
-/** Lab Routes  Ends*/
-
-/** time slot Routes*/
-router.post('/timeSlot/all', timeSlotController.index)
-router.post('/timeSlot/single', timeSlotController.fetchTimeSlotById)
-router.post('/timeSlot/add',  timeSlotController.addTimeSlot)
-router.post('/timeSlot/update', timeSlotController.updateTimeSlot)
-router.post('/timeSlot/delete', timeSlotController.deleteTimeSlot)
-
-/** time slot Routes  Ends*/
 
 
 /** batch Routes  Ends*/
@@ -223,17 +201,6 @@ router.post('/callSheetDetail/add', callSheetDetailController.addCallSheetDetail
 
 /** CallSheet Routes Ends*/
 
-/** Enquiry Routes*/
-
-router.post('/calculateFee/all', calculateFeeController.index)
-router.post('/calculateFee/add', calculateFeeController.calculateFee)
-router.post('/calculateFee/enquiry/single', calculateFeeController.fetchCalculatedFeeByEnquiryId)
-router.post('/calculateFee/admission/single', calculateFeeController.fetchCalculatedFeeByAdmissionId)
-router.post('/calculateFee/update', calculateFeeController.recalculateFee)
-
-
-/** Enquiry Routes Ends*/
-
 
 /** Student Routes */
 
@@ -244,19 +211,6 @@ router.post('/student/update', studentController.updateStudent)
 router.post('/student/delete', studentController.deleteStudent)
 
 /** Student Routes Ends*/
-
-/** Admission Routes */
-
-router.post('/admission/all', admissionController.index)
-router.post('/admission/single', admissionController.fetchAdmissionById)
-router.post('/admission/add', admissionController.addAdmission)
-router.post('/admission/confirm', admissionController.confirmAdmission)
-router.post('/admission/update', admissionController.updateAdmission)
-router.post('/admission/details/update', admissionController.updateDetailAdmission)
-router.post('/admission/delete', admissionController.deleteAdmission)
-router.post('/admission/changeCourse', admissionController.changeCourse)
-
-/** Admission Routes Ends*/
 
 
 /** StoreItem Routes */
@@ -273,12 +227,10 @@ router.post('/storeItem/delete', storeItemController.deleteStoreItem)
 router.post('/report/registrationDefaulter',reportController.registrationDefaulter)
 router.post('/report/daybook',reportController.dayBook)
 router.post('/report/daybookSummary',reportController.dayBookSummary);
-router.post('/report/dropList',admissionController.dropAdmissionList);
 router.post('/report/enquiry/list',enquiryController.dropEnquiryList);
 router.post('/report/overallBalance',reportController.overallBalance);
 
 
-router.post('/admission/dropAdmission',admissionController.dropAdmission)
 
 router.post('/company/all',companyController.index);
 
