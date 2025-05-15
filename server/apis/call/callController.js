@@ -50,7 +50,6 @@ function indexFun(req, next) {
             .skip(skip1)
             .limit(lim)
             .populate({path:'enquiryId', populate:{path:'college technologies.course'}})
-            .populate({path:'admissionId',populate:{path:'studentId college technologies.course'}})
             .sort({createdAt:-1})
             .exec()
             .then(async alldocuments => {
@@ -76,7 +75,6 @@ function addCallFun(req, next) {
         const createSchema = Joi.object().keys({
             isEnquiryCall: Joi.boolean().required(),
             enquiryId: Joi.any(),
-            admissionId: Joi.any(),
             callerName: Joi.string().required(),
             callStatus: Joi.string().required()
         }).unknown(true);

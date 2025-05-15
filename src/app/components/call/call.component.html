@@ -18,6 +18,10 @@
                     <button class="btn btn-primary btn-sm mx-2" *ngIf="" (click)="generateExcel()">Generate
                         Excel</button>
 
+                    <button class="btn btn-primary btn-sm mx-2" [routerLink]="['/admin/call/add-multiple', 'admission']"
+                        *ngIf="tabIndex==2">
+                        + Add Admission Calls
+                    </button>
                     <button class="btn btn-primary btn-sm mx-2" routerLink="/admin/call/add-sheet" *ngIf="tabIndex==2">
                         + Add Call Sheet
                     </button>
@@ -25,9 +29,8 @@
                         *ngIf="tabIndex==0">
                         + Add Enquiry Calls
                     </button>
-                    <button class="btn btn-primary btn-sm mx-2" [routerLink]="['/admin/call/add-multiple', 'admission']"
-                        *ngIf="tabIndex==1">
-                        + Add Admission Calls
+                    <button class="btn btn-primary btn-sm mx-2" routerLink="/admin/call/add-sheet" *ngIf="tabIndex==1">
+                        + Add Call Sheet
                     </button>
                 </span>
 
